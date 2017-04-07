@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <div th:fragment="conicalClampingRingDetails" style="display: none">
+        <table id="containerDetails">
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.overflow.volume}"/>
+                </td>
+                <td>
+                    {{item.overflowVolume}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.un.code}"/>
+                </td>
+                <td>
+                    {{item.unCode}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.exzone}"/>
+                </td>
+                <td>
+                    {{item.exZone.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.perm.lock}"/>
+                </td>
+                <td>
+                    {{item.permLock}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.embossing}"/>
+                </td>
+                <td>
+                    {{item.embossing}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.embossing.position}"/>
+                </td>
+                <td>
+                    {{item.embossingPosition}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.coating.inside}"/>
+                </td>
+                <td>
+                    {{item.coatingInside.name}}
+                </td>
+            </tr>
+            <!--manufacturerSpecifications-->
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.manufacturer.specifications}"/>
+                </td>
+                <td>
+                    <a ng-if="item.manufacturerSpecificationsFilename" href="specifications/{{item.id}}">
+                        {{item.manufacturerSpecificationsFilename}}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.drawing.number}"/>
+                </td>
+                <td>
+                    {{item.drawingNumber}}
+                </td>
+            </tr>
+            <!--drawing-->
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.drawing}"/>
+                </td>
+                <td>
+                    <a ng-if="item.drawingFilename" href="drawing/{{item.id}}">
+                        {{item.drawingFilename}}
+                    </a>
+                </td>
+            </tr>
+            <!--drawingcad-->
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.drawing.cad}"/>
+                </td>
+                <td>
+                    <a ng-if="item.drawingCADFilename" href="drawingcad/{{item.id}}">
+                        {{item.drawingCADFilename}}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hull.wall.thickness}"/>
+                </td>
+                <td>
+                    {{item.hullWallThickness}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hull.wall.thickness.max}"/>
+                </td>
+                <td>
+                    {{item.hullWallThicknessMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hull.wall.thickness.min}"/>
+                </td>
+                <td>
+                    {{item.hullWallThicknessMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.inner.diameter.above}"/>
+                </td>
+                <td>
+                    {{item.innerDiameterAbove}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.inner.diameter.above.max}"/>
+                </td>
+                <td>
+                    {{item.innerDiameterAboveMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.inner.diameter.above.min}"/>
+                </td>
+                <td>
+                    {{item.innerDiameterAboveMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hull.height}"/>
+                </td>
+                <td>
+                    {{item.hullHeight}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hull.height.max}"/>
+                </td>
+                <td>
+                    {{item.hullHeightMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hull.height.min}"/>
+                </td>
+                <td>
+                    {{item.hullHeightMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.ground.wall.thickness}"/>
+                </td>
+                <td>
+                    {{item.groundWallThickness}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.ground.wall.thickness.max}"/>
+                </td>
+                <td>
+                    {{item.groundWallThicknessMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.ground.wall.thickness.min}"/>
+                </td>
+                <td>
+                    {{item.groundWallThicknessMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.lid.wall.thickness}"/>
+                </td>
+                <td>
+                    {{item.lidWallThickness}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.lid.wall.thickness.max}"/>
+                </td>
+                <td>
+                    {{item.lidWallThicknessMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.lid.wall.thickness.min}"/>
+                </td>
+                <td>
+                    {{item.lidWallThicknessMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.diameter.clamping.ring}"/>
+                </td>
+                <td>
+                    {{item.diameterClampingRing}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.diameter.clamping.ring.max}"/>
+                </td>
+                <td>
+                    {{item.diameterClampingRingMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.diameter.clamping.ring.min}"/>
+                </td>
+                <td>
+                    {{item.diameterClampingRingMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.total.weight}"/>
+                </td>
+                <td>
+                    {{item.totalWeight}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.total.weight.max}"/>
+                </td>
+                <td>
+                    {{item.totalWeightMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.total.weight.min}"/>
+                </td>
+                <td>
+                    {{item.totalWeightMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.weight.inner.container}"/>
+                </td>
+                <td>
+                    {{item.weightInnerContainer}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.weight.inner.container.max}"/>
+                </td>
+                <td>
+                    {{item.weightInnerContainerMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.weight.inner.container.min}"/>
+                </td>
+                <td>
+                    {{item.weightInnerContainerMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.overall.height}"/>
+                </td>
+                <td>
+                    {{item.overallHeight}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.overall.height.max}"/>
+                </td>
+                <td>
+                    {{item.overallHeightMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.overall.height.min}"/>
+                </td>
+                <td>
+                    {{item.overallHeightMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.sicken}"/>
+                </td>
+                <td>
+                    {{item.sicken}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.inner.diameter.below}"/>
+                </td>
+                <td>
+                    {{item.innerDiameterBelow}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.inner.diameter.below.max}"/>
+                </td>
+                <td>
+                    {{item.innerDiameterBelowMax}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.inner.diameter.below.min}"/>
+                </td>
+                <td>
+                    {{item.innerDiameterBelowMin}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.coating.outside}"/>
+                </td>
+                <td>
+                    {{item.coatingOutside.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.handle}"/>
+                </td>
+                <td>
+                    {{item.handle.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.container.material}"/>
+                </td>
+                <td>
+                    {{item.containerMaterial.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.hole}"/>
+                </td>
+                <td>
+                    {{item.hole.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.coating.tank}"/>
+                </td>
+                <td>
+                    {{item.coatingTank.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.other}"/>
+                </td>
+                <td>
+                    {{item.other}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.info}"/>
+                </td>
+                <td>
+                    <div ng-repeat="info in item.infoList">
+                        <label>{{info.language.$name}}:</label>
+                        {{info.comments}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label th:utext="#{label.container.images}"/>
+                </td>
+                <td>
+                    <div ng-repeat="photo in item.photos">
+                        {{photo.filename}}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

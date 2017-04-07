@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='businessunit'"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+	<div th:fragment="content" class="content">
+		<link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+        <script type="text/javascript" th:inline="javascript">
+			var object = 'user';
+            var itemsCount = [[${dataCount}]];
+            var columns = [
+                {title: [[#{label.user.name}]], field: 'name', visible: true},
+                {title: [[#{label.user.surname}]], field: 'surname', visible: true},
+                {title: [[#{label.user.email}]], field: 'email', visible: true},
+                {title: [[#{label.user.role}]], field: 'role', visible: true},
+                {title: [[#{label.user.status}]], field: 'status', visible: true},
+                {title: [[#{label.user.phone.number}]], field: 'phoneNumber', visible: true},
+                {title: [[#{label.user.fax.number}]], field: 'faxNumber', visible: true},
+                {title: [[#{label.user.mobile.number}]], field: 'mobileNumber', visible: true}
+            ];
+            var columnFilter = [
+                {
+					field: columns[3].field, inPut: [], outPut: [],
+					localeFilter : {//default-label is deprecated and replaced with this.
+						selectAll       : [[#{label.filter.selectAll}]],
+						selectNone      : [[#{label.filter.selectNone}]],
+						reset           : [[#{label.filter.reset}]],
+						search          : [[#{label.filter.search}]],
+						nothingSelected : [[#{label.filter.user.select.role.all}]]
+					}
+				},
+                {
+					field: columns[4].field, inPut: [], outPut: [],
+					localeFilter : {//default-label is deprecated and replaced with this.
+						selectAll       : [[#{label.filter.selectAll}]],
+						selectNone      : [[#{label.filter.selectNone}]],
+						reset           : [[#{label.filter.reset}]],
+						search          : [[#{label.filter.search}]],
+						nothingSelected : [[#{label.filter.user.select.status.all}]]
+					}
+				}
+            ];
+        </script>
+        <script th:each="role : ${T(de.mexchange.packagingdb.domain.lcp.UserRole).values()}"
+                type="text/javascript"
+                th:inline="javascript">
+            /*<![CDATA[*/
+            columnFilter[0].inPut.push({id: [[${role.value}]], name: [[#{${role.labelKey}}]], ticked: true  });
+            /*]]>*/
+        </script>
+        <script th:each="status : ${T(de.mexchange.packagingdb.domain.lcp.UserStatus).values()}"
+                type="text/javascript"
+                th:inline="javascript">
+            /*<![CDATA[*/
+            columnFilter[1].inPut.push({id: [[${status.value}]], name: [[#{${status.labelKey}}]], ticked: true  });
+            /*]]>*/
+        </script>
+
+		<script src="../static/js/object-list.js" th:src="@{/js/object-list.js}"></script>
+		<div th:if="${message != null}" class="alert alert-success">
+			<strong th:text="${message}"></strong>
+		</div>
+
+		<div class="page-container" style="display: block; height: 30px; padding: 0; margin: 0 0 10px 0;">
+			<span th:utext="#{title.user.registration}"/>
+			<button type="button" class="btn btn-sm btn-default" onclick="document.location='add'" style="float:right;"
+					sec:authorize="hasAnyRole('ROLE_ADMIN')" th:utext="#{btn.create}">
+				Create New
+			</button>
+		</div>
+
+		<div ng-controller="objectListController" id="listContent">
+			<div th:if="${dataCount > 0}">
+                <form class="form-inline btn btn-primary" style="margin-bottom: 10px;width: 100%">
+                    <div style="float: left;margin-right: 10px;" class="form-group">
+                        <isteven-multi-select
+                                directive-id="filter_role"
+                                input-model="columnFilter[0].inPut"
+                                output-model="columnFilter[0].outPut"
+                                button-label="name"
+                                item-label="name"
+                                max-labels="1"
+                                max-height="auto"
+                                min-search-length="1"
+                                output-properties="id"
+								translation="columnFilter[0].localeFilter"
+                                tick-property="ticked" >
+                        </isteven-multi-select>
+                    </div>
+                    <div style="float: left;margin-right: 10px;" class="form-group">
+                        <isteven-multi-select
+                                directive-id="filter_status"
+                                input-model="columnFilter[1].inPut"
+                                output-model="columnFilter[1].outPut"
+                                button-label="name"
+                                item-label="name"
+                                max-labels="1"
+                                max-height="auto"
+                                min-search-length="1"
+                                output-properties="id"
+								translation="columnFilter[1].localeFilter"
+                                tick-property="ticked" >
+                        </isteven-multi-select>
+                    </div>
+                    <div style="float: left" class="form-group">
+
+                        <input type="text"
+                               style="width: 115%"
+                               th:attr="name='searchBy'"
+                               id="filter_search_by"
+                               th:placeholder="#{label.filter.user.name.surname.email}" class="form-control input-md"/>
+                        <span class="">
+                            <button type="button" class="form-control btn-info "
+                                    ng-click="tableParams.sorting(columns[0].field, tableParams.isSortBy(columns[0].field, 'asc') ? 'desc' : 'asc')"
+                            >
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+
+				<form action="#" th:action="@{/admin/user/remove}" method="post">
+					<div class="btn-group">
+						<label class="btn btn-primary"
+							   ng-repeat="column in columns"
+							   ng-bind-html="column.title"
+							   ng-class="column.visible ? 'btn btn-primary ng-scope ng-binding' : 'btn btn-primary ng-scope ng-binding column-unchecked'">
+							<input type="checkbox" ng-model="column.visible" ng-click="alert(column.visible);" />
+						</label>
+					</div>
+					<table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped listItems">
+						<thead>
+						<tr>
+							<th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+							<th ng-repeat="column in columns" ng-show="column.visible"
+								ng-bind-html="column.title"
+								class="text-center sortable"  ng-class="{
+                                            'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                            'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                                          }" style="vertical-align: top; text-align: center; min-width: 90px;"
+								ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+
+							</th>
+							<th sec:authorize="hasAnyRole('ROLE_ADMIN')"></th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="item in $data" ng-class-even="'tbl-row-even'">
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<input type="checkbox" name="id" value="{{item.id}}"/>
+							</td>
+							<td ng-show="columns[0].visible" sortable="columns[0].field">
+								{{item.name}}
+							</td>
+							<td ng-show="columns[1].visible" sortable="columns[1].field">
+								{{item.surname}}
+							</td>
+							<td ng-show="columns[2].visible" sortable="columns[2].field">
+								{{item.email}}
+							</td>
+							<td ng-show="columns[3].visible" sortable="columns[3].field">
+								{{item.role}}
+							</td>
+							<td ng-show="columns[4].visible" sortable="columns[4].field">
+								{{item.status}}
+							</td>
+							<td ng-show="columns[5].visible" sortable="columns[5].field">
+								{{item.phoneNumber}}
+							</td>
+							<td ng-show="columns[6].visible" sortable="columns[6].field">
+								{{item.faxNumber}}
+							</td>
+							<td ng-show="columns[7].visible" sortable="columns[7].field">
+								{{item.mobileNumber}}
+							</td>
+							<td sec:authorize="hasAnyRole('ROLE_ADMIN')">
+								<a href="edit/{{item.id}}" th:utext="#{lnk.edit}"></a>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+					<div sec:authorize="hasRole('ROLE_ADMIN')" style="text-align: right">
+						<button type="submit" class="btn btn-sm btn-default" th:utext="#{btn.remove}" style="margin-top: 5px;"></button>
+					</div>
+					<input type="hidden" ng-model="itemsCount" th:attr="ng-init='itemsCount=' + ${dataCount}"/>
+					<input type="hidden" ng-model="actionPath" ng-init="actionPath='/admin/user/list-items'"/>
+
+				</form>
+			</div>
+			<div th:if="${dataCount == 0}" th:utext="#{info.list.data.found}"></div>
+		</div>
+	</div>
+</body>
+</html>

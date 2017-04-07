@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='process'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <script src="../static/js/process.js" type="text/javascript" th:src="@{/js/process.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="processController">
+        <form action="#" th:action="@{/globalinformation/edit}" th:object="${process}" enctype="multipart/form-data" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.global.information.form}"></caption>
+                <tr th:if="*{processFilename != null}">
+                    <td>
+                        <label th:utext="#{label.process.filename}"/>
+                    </td>
+                    <td>
+                        <a id="processFileLink" ng-show="!processFileRemoved"
+                           th:href="@{/globalinformation/attachment/{id}(id=*{id})}"
+                           th:text="*{processFilename}"></a>
+                        <label ng-show="processFileRemoved" th:text="*{processFilename}"/>
+                        <input type="hidden" id="processFilename"
+                               th:attr="name='processFilename'" th:value="*{processFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.process.filename}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('processFilename')}" th:errors="*{processFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.process.removeFile}" />
+                    </td>
+                    <td>
+                        <input type="checkbox" name="processFileRemoved" ng-model="processFileRemoved" ng-click="processFileRemovedChanged()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.process.remarks}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{remarks}" th:placeholder="remarks" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="field-error"></td>
+                </tr>
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.process.name}">Name</label>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].name}"
+                               th:placeholder="name" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].name')}"
+                        th:errors="*{infoList[__${status.index}__].name}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

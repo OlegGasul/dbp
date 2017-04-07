@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='handle'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms">
+        <form action="#" th:action="@{/handle/add}" th:object="${handle}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.handle.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.handle.form.remark}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{remark}" th:placeholder="#{label.handle.form.remark}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('remark')}" th:errors="*{remark}" class="field-error"></td>
+                </tr>
+
+                <tr th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.handle.form.name}">Name</label>
+                    </td>
+                    <td>
+                        <img th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${lang}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].name}"
+                               th:placeholder="#{label.handle.form.name}" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].name')}"
+                        th:errors="*{infoList[__${status.index}__].name}" class="field-error"></td>
+                </tr>
+
+                <!-- end of address-->
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

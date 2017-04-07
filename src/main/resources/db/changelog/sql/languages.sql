@@ -1,0 +1,1 @@
+insert into LANGUAGE(id, name) values(1, 'English'), (2, 'German')

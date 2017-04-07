@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+<body>
+     <div th:fragment="business-unit">
+         <tags-input ng-model="tags"
+                     min-tags="1"
+                     max-tags="1"
+                     display-property="name"
+                     addFromAutocompleteOnly="true"
+                     placeholder="Select a Business Unit"
+                     replace-spaces-with-dashes="false"
+                     template="tag-bu-template">
+             <auto-complete source="loadBusinessUnits($query)"
+                            min-length="0"
+                            load-on-focus="true"
+                            load-on-empty="true"
+                            max-results-to-show="32"
+                            template="autocomplete-bu-template"></auto-complete>
+         </tags-input>
+
+         <script type="text/ng-template" id="tag-bu-template">
+             <div class="tag-template">
+                 <div class="left-panel">
+                     <img ng-src="image/flag/{{data.flag}}" ng-if="data.flag"/>
+                 </div>
+                 <div class="right-panel">
+                     <span>{{$getDisplayText()}}</span>
+                     <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+                 </div>
+             </div>
+         </script>
+
+         <script type="text/ng-template" id="autocomplete-bu-template">
+             <div class="autocomplete-template">
+                 <div class="left-panel">
+                     <img ng-src="image/flag/{{data.flag}}" />
+                 </div>
+                 <div class="right-panel">
+                     <span ng-bind-html="$highlight($getDisplayText())"></span>
+                     <span>({{data.rank}})</span>
+                     <span>{{data.confederation}}</span>
+                 </div>
+             </div>
+         </script>
+     </div>
+</body>
+</html>

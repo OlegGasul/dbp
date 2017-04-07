@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='company'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <script src="../static/js/company.js" th:src="@{/js/company.js}"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+            var categories =  [[${company.companyCategories}]];
+            if (categories && categories.length > 0) {
+                var companyContent = document.getElementById('companyContent');
+                var $scope = angular.element(companyContent).scope();
+                $scope.initCategories(categories);
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            }
+        });
+        /*]]>*/
+    </script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="companyController" id="companyContent">
+        <form action="#" th:action="@{/company/add}" th:object="${company}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.company.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.form.name}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{name}" th:placeholder="name" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.form.phone}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{phone}" th:placeholder="phone" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{phone}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.form.fax}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{fax}" th:placeholder="fax" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('fax')}" th:errors="*{fax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.form.vendornumber}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{vendorNumber}" th:placeholder="vendorNumber" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('vendorNumber')}" th:errors="*{vendorNumber}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.form.website}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{website}" th:placeholder="website" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('website')}" th:errors="*{website}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.form.category}"/>
+                    </td>
+                    <td>
+                        <tags-input ng-model="categories"
+                                    min-tags="1"
+                                    display-property="name"
+                                    on-tag-added="categorySelected($tag)"
+                                    on-tag-removed="categoryRemoved($tag)"
+                                    add-on-enter="false"
+                                    add-on-comma="false"
+                                    add-on-blur="false"
+                                    placeholder="Category"
+                                    addFromAutocompleteOnly="true">
+                            <auto-complete source="loadCategories($query)"></auto-complete>
+                        </tags-input>
+                        <div ng-repeat="category in categories" style="display: none;">
+                            <input type="hidden"
+                                   th:attr="name='companyCategories[{{$index}}].id'"
+                                   value="{{category.id}}"/>
+                            <input type="hidden"
+                                   th:attr="name='companyCategories[{{$index}}].infoList[0].name'"
+                                   value="{{category.name}}"/>
+                        </div>
+                    </td>
+                    <td th:if="${#fields.hasErrors('companyCategories')}" th:errors="*{companyCategories}" class="field-error"></td>
+                </tr>
+                <!-- Address -->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.address.country}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{address.country.id}" >
+                            <option th:each="country : ${countries}"
+                                    th:value="${country.id}"
+                                    th:text="${country.currentInfo.name}">
+                                Country
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.country')}" th:errors="*{address.country}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.address.city}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{address.city}" th:placeholder="city" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.address.street}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{address.street}" th:placeholder="street" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.street')}" th:errors="*{address.street}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.company.address.zipcode}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{address.zipCode}" th:placeholder="zipcode" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.zipCode')}" th:errors="*{address.zipCode}" class="field-error"></td>
+                </tr>
+                <!-- end of address-->
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='untestmedium'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="gasketController">
+        <form action="#" th:action="@{/untestmedium/edit}" th:object="${untestmedium}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.medium.form.edit}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.medium.form.code}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{code}" th:placeholder="#{label.medium.form.code}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('code')}" th:errors="*{code}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.medium.form.others}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{others}" th:placeholder="#{label.medium.form.others}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('others')}" th:errors="*{others}" class="field-error"></td>
+                </tr>
+
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.medium.form.medium}">Medium</label>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].medium}"
+                               th:placeholder="#{label.medium.form.medium}" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].medium')}"
+                        th:errors="*{infoList[__${status.index}__].medium}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

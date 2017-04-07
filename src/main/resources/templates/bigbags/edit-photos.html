@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='bigbags'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/fileinput.css}" href="../static/css/fileinput.css" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <script src="../static/js/fileinput.js" th:src="@{/js/fileinput.js}"></script>
+    <script src="../static/js/jquery/jquery.unveil.js" th:src="@{/js/jquery/jquery.unveil.js}"></script>
+    <script src="../static/js/container.js" th:src="@{/js/container.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="containerController" id="bigbagsForm">
+        <div class="image-object-info">
+
+        </div>
+        <div class="form-group" id="files-container"></div>
+
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var initialPreview = [];
+            var initialPreviewConfig = [];
+
+            var photos = [[${bigbags.photos}]];
+            if (photos && photos.length > 0) {
+                for (var i = 0; i < photos.length; i++) {
+                    initialPreview.push(
+                       "<img data-src='" + contextPath + "/bigbags/photo/" + photos[i].id + "' " +
+                            " data-src-retina='" + contextPath + "/bigbags/photo/" + photos[i].id + "' " +
+                            " src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'" +
+                            " class='file-preview-image' style='width:auto; height:160px;'" +
+                            " alt='" +  photos[i].filename + "' title='" +  photos[i].filename + "'/>"
+                    );
+                    initialPreviewConfig.push({
+                        caption: photos[i].filename,
+                        width: '600px',
+                        url: contextPath + '/bigbags/remove-photo/' + photos[i].id
+                    });
+                }
+            }
+
+
+            $(document).on('ready', function() {
+                $("#files-container").append(
+                    '<input id="files" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="2"/>'
+                );
+                $("#files").fileinput({
+                    uploadUrl: contextPath + '/bigbags/photo-add/' + [[${bigbags.id}]], // you must set a valid URL here else you will get an error
+                    allowedFileExtensions : ['jpg', 'png','gif'],
+                    overwriteInitial: false,
+                    maxFileSize: 1000,
+                    maxFilesNum: 10,
+                    //allowedFileTypes: ['image', 'video', 'flash'],
+                    slugCallback: function(filename) {
+                        return filename.replace('(', '_').replace(']', '_');
+                    },
+                    initialPreview: initialPreview,
+                    initialPreviewConfig: initialPreviewConfig
+                });
+                $("img").unveil();
+            });
+            /*]]>*/
+        </script>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='closure'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="closureController">
+        <form action="#" th:action="@{/closure/edit}" th:object="${closure}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.closure.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.closure.diameter}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{diameter}" th:placeholder="diameter" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('diameter')}" th:errors="*{diameter}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.closure.remarks}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{remarks}" th:placeholder="remarks" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.closure.coating.inside}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{insideCoating.id}" >
+                            <option value="">-- Choose Inside Coating --</option>
+                            <option th:each="coating : ${coatings}"
+                                    th:value="${coating.id}"
+                                    th:text="${coating.name}">
+                                Inside Coating
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('insideCoating')}" th:errors="*{insideCoating}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.closure.coating.outside}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{outsideCoating.id}" >
+                            <option value="">-- Choose Outside Coating --</option>
+                            <option th:each="coating : ${coatings}"
+                                    th:value="${coating.id}"
+                                    th:text="${coating.name}">
+                                Outside Coating
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('outsideCoating')}" th:errors="*{outsideCoating}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.closure.material}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{material.id}" >
+                            <option value="">-- Choose Material --</option>
+                            <option th:each="material : ${materials}"
+                                    th:value="${material.id}"
+                                    th:text="${material.name}">
+                                Material
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('material')}" th:errors="*{material}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.closure.gasket}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{gasket.id}" >
+                            <option value="">-- Choose Gasket --</option>
+                            <option th:each="gasket : ${gaskets}"
+                                    th:value="${gasket.id}"
+                                    th:text="${gasket.name}">
+                                Material
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('gasket')}" th:errors="*{gasket}" class="field-error"></td>
+                </tr>
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.closure.name}">Name</label>
+                    </td>
+                    <td>
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].name}"
+                               th:placeholder="name" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].name')}"
+                        th:errors="*{infoList[__${status.index}__].name}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

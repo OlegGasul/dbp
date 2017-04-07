@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='login'">
+<head></head>
+<body>
+	<div class="login-container" th:fragment="content">
+		<div th:if="${messageSuccess != null}" class="alert alert-success">
+			<strong th:text="${messageSuccess}"></strong>
+		</div>
+		<div th:if="${messageDanger != null}" class="alert alert-danger fade in">
+			<strong th:text="${messageDanger}"></strong>
+		</div>
+
+		<div th:if="${param.error}" class="alert alert-danger fade in"
+			 th:utext="#{err.invalid.credentioal}"></div>
+		<div th:if="${param.logout}" class="alert alert-danger fade in"
+			 th:utext="#{err.already.logged.out}"></div>
+
+		<form class="form-signin" th:action="@{/login}" method="post">
+			<h2 class="form-signin-heading" th:utext="#{form.login.heading}"></h2>
+
+			<label for="inputEmail" class="sr-only" th:utext="#{label.email}"></label>
+			<input type="email" name="email" id="inputEmail"
+				   class="form-control" th:placeholder="#{label.email}"/>
+
+			<label for="inputPassword" class="sr-only" th:utext="#{label.password}"></label>
+			<input type="password" name="password" id="inputPassword"
+				   class="form-control" th:placeholder="#{label.password}"/>
+
+			<div >
+				<a th:href="@{/forget-password}" th:utext="#{label.forget.password}">Forgot Password</a>
+			</div>
+
+			<button class="btn btn-sm" type="submit" th:utext="#{btn.login}"></button>
+		</form>
+	</div>
+</body>
+</html>

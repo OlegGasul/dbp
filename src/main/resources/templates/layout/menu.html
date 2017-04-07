@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+	<nav class="navbar sidebar layout-menu" role="navigation" th:fragment="menu">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="active">
+						<a th:href="@{/user/home}">
+							<th:block th:utext="#{label.menu.start.page}"/>
+							<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span>
+						</a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#sub1">
+							<th:block th:utext="#{label.menu.global.processes.information}"/>
+							<span class="caret"></span>
+							<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span>
+						</a>
+						<ul class="dropdown-menu forAnimate" role="menu" id="sub1">
+							<li>
+								<a th:href="@{/globalprocess/list}">
+									<th:block th:utext="#{label.menu.global.processes}"/>
+								</a>
+							</li>
+							<li>
+								<a th:href="@{/globalinformation/list}">
+									<th:block th:utext="#{label.menu.global.policies}"/>
+								</a>
+							</li>
+						</ul>
+					</li>
+
+					<li class="dropdown">
+                        <a th:href="@{/container/search}" id="containersLink" class="dropdown-toggle" data-toggle="collapse" data-target="#containers">
+                            <th:block th:utext="#{label.menu.containers}"/>
+                            <span class="caret"></span>
+                            <span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span>
+                        </a>
+                        <ul class="dropdown-menu forAnimate" role="menu" id="containers">
+                            <li>
+                                <a th:href="@{/bulk/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.bulk}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/cubic/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.cubic}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/cylindrical/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.cylindrical}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/bigbags/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.big.bags}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/conicalcanister/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.conical.canister}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/conicalcans/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.conical.cans}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/conicalclampingring/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.concal.clamping.rings}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/cylindricalclampingring/list}">
+                                    <th:block th:utext="#{label.menu.container.objects.cylindrical.clamping.rings}"/>
+                                </a>
+                            </li>
+                        </ul>
+					</li>
+					<li>
+						<a th:href="@{/company/list}">
+							<th:block th:utext="#{label.menu.manufacturer}"/>
+							<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tags"></span>
+                        </a>
+					</li>
+					<li>
+						<a th:href="@{/unapproval/list}">
+							<th:block th:utext="#{label.menu.certificate.registration}"/>
+							<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tags"></span>
+						</a>
+					</li>
+                    <li sec:authorize="hasAnyRole('ROLE_ADMIN')" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#administration">
+                            <th:block th:utext="#{label.menu.administration}"/>
+                            <span class="caret"></span>
+                            <span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span>
+                        </a>
+                        <ul class="dropdown-menu forAnimate" role="menu" id="administration">
+                            <li>
+                                <a th:href="@{/admin/user/list}">
+                                    <th:block th:utext="#{label.menu.users}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/news/list}">
+                                    <th:block th:utext="#{label.menu.news}"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#refObjs">
+                                    <th:block th:utext="#{label.menu.ref.objects}"/>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu forAnimate" role="menu" id="refObjs" style="padding-left: 10px;">
+                                    <li>
+                                        <a th:href="@{/aggregatestate/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.aggregatestate}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/businessunit/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.businessunit}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/coating/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.coating}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/palettetype/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.palettetype}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/packagingform/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.packagingform}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/material/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.material}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/exzone/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.exzone}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/gasket/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.gasket}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/location/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.location}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/country/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.country}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/companycategory/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.companycategiry}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/closure/list}">
+                                            <th:block th:utext="#{label.menu.ref.objects.closure}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/handle/list}">
+                                            <th:block th:utext="#{label.menu.handle}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/transport/list}">
+                                            <th:block th:utext="#{label.menu.transport}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/assimilationlist/list}">
+                                            <th:block th:utext="#{label.menu.assimilationList}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/packaginginstruction/list}">
+                                            <th:block th:utext="#{label.menu.packaging.instruction}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/coupling/list}">
+                                            <th:block th:utext="#{label.menu.coupling}"/>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{/untestmedium/list}">
+                                            <th:block th:utext="#{label.menu.medium}"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</body>
+</html>

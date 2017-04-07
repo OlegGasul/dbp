@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='conicalCans'"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+    <div th:fragment="content" class="content container-list">
+
+        <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var object = 'conicalcans';
+            var itemsCount = [[${dataCount}]];
+            var columns = [
+                {title: [[#{label.container.name}]], field: 'name', visible: true},
+                {title: [[#{label.container.vps.number}]], field: 'vpsNumber', visible: true},
+                {title: [[#{label.container.nominal.volume}]], field: 'nominalVolume', visible: true},
+                {title: [[#{label.container.type}]], field: 'type', visible: true},
+                {title: [[#{label.container.image}]], field: 'image', visible: true},
+                {title: [[#{label.container.manufacturer}]], field: 'manufacturer', visible: true},
+                {title: [[#{label.container.approval}]], field: 'approval', visible: true}
+            ];
+            /*]]>*/
+        </script>
+        <script src="../static/js/container-list.js" th:src="@{/js/container-list.js}"></script>
+
+        <div th:if="${message != null}" class="alert alert-success">
+            <strong th:text="${message}"></strong>
+        </div>
+
+        <div class="page-container" style="display: block; height: 30px; padding: 0; margin: 0 0 10px 0;">
+            <span th:utext="#{title.conical.cans.form}"/>
+            <button type="button" class="btn btn-sm" onclick="document.location='add'" style="float:right;"
+                    sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')" th:utext="#{btn.create}">
+                Create New
+            </button>
+        </div>
+        <div ng-controller="listController" id="listContent">
+            <div th:if="${dataCount > 0}">
+                <form action="#" th:action="@{/conicalcans/remove}" method="post">
+                    <div class="btn-group">
+                        <label class="btn btn-primary"
+                               ng-repeat="column in columns"
+                               ng-class="column.visible ? 'btn btn-primary ng-scope ng-binding' : 'btn btn-primary ng-scope ng-binding column-unchecked'">
+                            <input type="checkbox" ng-model="column.visible" ng-click="alert(column.visible);" />
+                            <span ng-bind-html="column.title"/>
+                        </label>
+                    </div>
+                    <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped listItems">
+                        <thead>
+                        <tr>
+                            <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                            <th ng-repeat="column in columns" ng-show="column.visible"
+                                ng-bind-html="column.title"
+                                class="text-center sortable"  ng-class="{
+                                                'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                                'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                                              }" style="vertical-align: top; text-align: center; min-width: 90px;"
+                                ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+
+                            </th>
+                            <th sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in $data" ng-class-even="'tbl-row-even'">
+                            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                <input type="checkbox" name="id" value="{{item.id}}"/>
+                            </td>
+                            <td ng-show="columns[0].visible" sortable="columns[0].field">
+                                {{item.name ? item.name : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[1].visible" sortable="columns[1].field">
+                                {{item.vpsNumber ? item.vpsNumber : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[2].visible" sortable="columns[2].field">
+                                {{item.nominalVolume ? item.nominalVolume : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[3].visible" sortable="columns[3].field"
+                                th:utext="#{label.container.type.conical.cans}"/>
+                            <td ng-show="columns[4].visible" sortable="columns[4].field">
+                                <label ng-if="!hasPhoto(item)" th:utext="#{msg.info.data.not.available}"/>
+                                <a ng-if="hasPhoto(item)" ng-click="showPhoto(item, 'conicalcans')" style="cursor: pointer;">
+                                    {{item.photos[0].filename}}
+                                </a>
+                            </td>
+                            <td ng-show="columns[5].visible" sortable="columns[5].field">
+                                {{item.manufacturer ? item.manufacturer : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[6].visible" sortable="columns[6].field">
+                                {{item.manufacturer ? item.manufacturer : 'N/A'}}
+                            </td>
+                            <td sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')">
+                                <div>
+                                    <a href="#" th:utext="#{btn.view.details}" ng-click="viewDetail(item);"></a>
+                                </div>
+                                <div sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')">
+                                    <a href="#" th:utext="#{btn.edit.photos}" ng-click="editPhoto(item.id);"></a>
+                                </div>
+                                <div sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')">
+                                    <a href="edit/{{item.id}}" th:utext="#{lnk.edit}"></a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')" style="text-align: right;">
+                        <button type="submit" class="btn btn-sm btn-default" style=" margin-top:5px;" th:utext="#{btn.remove}"></button>
+                    </div>
+                    <input type="hidden" ng-model="itemsCount" th:attr="ng-init='itemsCount=' + ${dataCount}"/>
+                    <input type="hidden" ng-model="actionPath" ng-init="actionPath='/conicalcans/list-items'"/>
+                </form>
+            </div>
+            <div th:if="${dataCount == 0}" th:utext="#{info.list.data.found}"></div>
+
+            <div th:replace="dialog/dlg-image :: imageDialog"></div>
+            <div th:replace="conicalcans/details :: conicalcansDetails"></div>
+            <div th:replace="dialog/dlg-container-detail :: containerDetailDialog"></div>
+        </div>
+    </div>
+</body>
+</html>

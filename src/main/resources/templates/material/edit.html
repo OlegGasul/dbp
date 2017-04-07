@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='material'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms">
+        <form action="#" th:action="@{/material/edit}" th:object="${material}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.material.form}"></caption>
+
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.material.name}">Name</label>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].name}"
+                               th:placeholder="name" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].name')}"
+                        th:errors="*{infoList[__${status.index}__].name}" class="field-error"></td>
+                </tr>
+
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.material.shortname}">Short Name</label>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].shortName}"
+                               th:placeholder="shortName" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].shortName')}"
+                        th:errors="*{infoList[__${status.index}__].shortName}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.material.aggregate.state}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{aggregateState.id}" >
+                            <option th:each="aggrState : ${aggregateStates}"
+                                    th:value="${aggrState.id}"
+                                    th:text="${aggrState.currentInfo.state}">
+                                Aggregate State
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('aggregateState')}" th:errors="*{aggregateState}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.material.remarks}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{remarks}" th:placeholder="remarks" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

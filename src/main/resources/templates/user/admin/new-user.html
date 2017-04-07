@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div th:fragment="content">
+		<div class="user-regitarion.content"  style="height: 600px;">
+			<div th:utext="#{title.user.registration}"></div>
+			<form action="#" th:action="@{/admin/user/add}" th:object="${user}" method="post">
+				<table style="margin: 0 auto">
+					<tr>
+						<td>
+							<input type="text" th:field="*{name}" th:placeholder="#{label.user.name}" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{surname}" th:placeholder="#{label.user.surname}" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="email" th:field="*{email}" th:placeholder="#{label.user.email}" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<select class="form-control" th:field="*{role}">
+								<option value="" th:utext="#{label.user.select.role}"></option>
+								<option th:each="role : ${T(de.mexchange.packagingdb.domain.lcp.UserRole).values()}"
+										th:value="${role}" th:utext="#{${role.labelKey}}"
+										th:selected="${role} == *{role}">Options</option>
+							</select>
+						</td>
+						<td th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<th:block th:each="status : ${T(de.mexchange.packagingdb.domain.lcp.UserStatus).values()}">
+								<label th:utext="#{${status.labelKey}}"></label>
+								<input type="radio" th:field="*{status}" th:value="${status}"/>
+							</th:block>
+						</td>
+						<td th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{phoneNumber}" th:placeholder="#{label.user.phone.number}" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{faxNumber}" th:placeholder="#{label.user.fax.number}" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('faxNumber')}" th:errors="*{faxNumber}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{mobileNumber}" th:placeholder="#{label.user.mobile.number}" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}" class="field-error"></td>
+					</tr>
+
+					<!-- Address -->
+					<tr>
+						<td>
+							<select class="form-control" th:field="*{address.country.id}" >
+								<option th:each="country : ${countries}"
+										th:value="${country.id}"
+										th:text="${country.currentInfo.name}">
+									Country
+								</option>
+							</select>
+						</td>
+						<td th:if="${#fields.hasErrors('address.country')}" th:errors="*{address.country}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{address.city}" th:placeholder="city" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{address.street}" th:placeholder="street" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('address.street')}" th:errors="*{address.street}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{address.zipCode}" th:placeholder="zipcode" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('address.zipCode')}" th:errors="*{address.zipCode}" class="field-error"></td>
+					</tr>
+					<!-- end of address-->
+
+					<tr>
+						<td style="text-align: right;">
+							<button type="submit" th:utext="#{btn.register}" class="btn btn-sm">register</button>
+						</td>
+						<td th:if="${#fields.hasErrors('*')}"></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

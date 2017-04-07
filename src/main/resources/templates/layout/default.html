@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  ng-app="mainApp">
+<head>
+	<title>
+		<th:block th:utext="#{__${pageTitle}__}"/>
+	</title>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+	<link th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
+		  href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+		  rel="stylesheet" media="screen"/>
+	<link th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap-theme.min.css}"
+		  href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+		  rel="stylesheet" media="screen"/>
+
+	<link th:href="@{/css/isteven-multi-select.css}" href="../static/css/isteven-multi-select.css" rel="stylesheet" media="screen"/>
+
+	<link th:href="@{/css/main.css}"
+		  href="../static/css/main.css"
+		  rel="stylesheet" media="screen"/>
+
+    <link th:href="@{/css/ng-tags-input.min.css}"
+          href="../static/css/ng-tags-input.min.css"
+          rel="stylesheet" media="screen"/>
+
+	<script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.3/jquery.min.js"
+			th:src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
+
+	<script src="http://cdn.jsdelivr.net/webjars/angularjs/1.5.0/angular.min.js"
+			th:src="@{/webjars/angularjs/1.5.0/angular.min.js}"></script>
+
+	<script src="http://cdn.jsdelivr.net/webjars/angularjs/1.5.0/angular-sanitize.min.js"
+			th:src="@{/webjars/angularjs/1.5.0/angular-sanitize.min.js}"></script>
+
+	<script src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js"
+			th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+
+    <script src="../static/js/ng-tags-input.min.js"
+            th:src="@{/js/ng-tags-input.min.js}"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+        var contextPath = [[${contextPath}]];
+    </script>
+	<script src="../static/js/angular/ng-table.min.js" type="text/javascript"
+            th:src="@{/js/angular/ng-table.min.js}"></script>
+	<script src="../static/js/angular/isteven-multi-select.js" type="text/javascript"
+            th:src="@{/js/angular/isteven-multi-select.js}"></script>
+	<script src="../static/js/main.js" type="text/javascript"
+            th:src="@{/js/main.js}"></script>
+</head>
+<body>
+	<div class="layout-container">
+		<div class="layout-header">
+			<div th:replace="layout/header :: header"></div>
+		</div>
+		<th:block sec:authorize="isAuthenticated()">
+			<div class="layout-menu" style="margin-top: 10px;">
+				<div th:replace="layout/menu :: menu"></div>
+			</div>
+			<div class="layout-view authorized">
+				<div th:replace="${content} :: content"></div>
+			</div>
+		</th:block>
+		<th:block sec:authorize="isAnonymous()">
+			<div class="layout-view">
+				<div th:replace="${content} :: content"></div>
+			</div>
+		</th:block>
+        <div style="clear: both; height: 1px;"></div>
+		<div class="layout-footer">
+			<div th:replace="layout/footer :: footer"></div>
+		</div>
+	</div>
+</body>
+</html>

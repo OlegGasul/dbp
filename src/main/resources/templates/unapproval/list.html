@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='unapproval'"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+	<div th:fragment="content" class="content">
+
+        <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var object = 'transport';
+            var itemsCount = [[${dataCount}]];
+            var columns = [
+                {title: [[#{label.approval.densityX}]], field: 'densityX', visible: false},
+                {title: [[#{label.approval.densityY}]], field: 'densityY', visible: false},
+                {title: [[#{label.approval.densityZ}]], field: 'densityZ', visible: false},
+                {title: [[#{label.approval.unCode}]], field: 'unCode', visible: true},
+                {title: [[#{label.approval.vaporPressure50}]], field: 'vaporPressure50', visible: false},
+                {title: [[#{label.approval.vaporPressure55}]], field: 'vaporPressure55', visible: false},
+                {title: [[#{label.approval.dateOfIssue}]], field: 'dateOfIssue', visible: true},
+                {title: [[#{label.approval.unVersion}]], field: 'unVersion', visible: true},
+                {title: [[#{label.approval.unit}]], field: 'unit', visible: true},
+                {title: [[#{label.approval.maxGrossWeight}]], field: 'maxGrossWeight', visible: false},
+                {title: [[#{label.approval.sleeps}]], field: 'sleeps', visible: false},
+                {title: [[#{label.approval.permeation}]], field: 'permeation', visible: true},
+                {title: [[#{label.approval.aggregateState}]], field: 'aggregateState', visible: true},
+                {title: [[#{label.approval.file}]], field: 'file', visible: true},
+
+                {title: [[#{label.approval.testMedium}]], field: 'testMedium', visible: true},
+                {title: [[#{label.approval.company}]], field: 'company', visible: true},
+                {title: [[#{label.approval.assimilationList}]], field: 'assimilationList', visible: false},
+                {title: [[#{label.approval.packaging.instruction}]], field: 'packagingInstruction', visible: false},
+                {title: [[#{label.approval.transport}]], field: 'transport', visible: false}
+            ];
+            /*]]>*/
+        </script>
+        <script src="../static/js/object-list.js" th:src="@{/js/object-list.js}"></script>
+
+        <div th:if="${message != null}" class="alert alert-success">
+            <strong th:text="${message}"></strong>
+        </div>
+
+		<div class="page-container" style="display: block; height: 30px; padding: 0; margin: 0 0 10px 0;">
+            <span th:utext="#{title.approval.form}"/>
+			<button type="button" class="btn btn-sm btn-default" onclick="document.location='add'" style="float:right;"
+                    sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')" th:utext="#{btn.create}">
+				Create New
+			</button>
+		</div>
+
+        <div ng-controller="objectListController" id="listContent">
+            <div th:if="${dataCount > 0}">
+                <form action="#" th:action="@{/unapproval/remove}" method="post">
+                    <div class="btn-group">
+                        <label class="btn btn-primary"
+                               ng-repeat="column in columns"
+                               ng-class="column.visible ? 'btn btn-primary ng-scope ng-binding' : 'btn btn-primary ng-scope ng-binding column-unchecked'">
+                            <input type="checkbox" ng-model="column.visible" ng-click="alert(column.visible);" />
+                            <span ng-bind-html="column.title"/>
+                        </label>
+                    </div>
+                    <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped listItems">
+                        <thead>
+                        <tr>
+                            <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                            <th ng-repeat="column in columns" ng-show="column.visible"
+                                class="text-center sortable"  ng-class="{
+                                        'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                        'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                                      }" style="vertical-align: top; text-align: center; min-width: 90px;"
+                                ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                                {{column.title}}
+                            </th>
+                            <th sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in $data" ng-class-even="'tbl-row-even'">
+                            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                <input type="checkbox" name="id" value="{{item.id}}"/>
+                            </td>
+                            <td ng-show="columns[0].visible" sortable="columns[0].field">
+                                {{item.densityX ? item.densityX : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[1].visible" sortable="columns[1].field">
+                                {{item.densityY ? item.densityY : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[2].visible" sortable="columns[2].field">
+                                {{item.densityZ ? item.densityZ : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[3].visible" sortable="columns[3].field">
+                                {{item.unCode ? item.unCode : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[4].visible" sortable="columns[4].field">
+                                {{item.vaporPressure50 ? item.vaporPressure50 : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[5].visible" sortable="columns[5].field">
+                                {{item.vaporPressure55 ? item.vaporPressure55 : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[6].visible" sortable="columns[6].field">
+                                {{item.dateOfIssue ? (item.dateOfIssue | date:'dd MMMM yyyy') : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[7].visible" sortable="columns[7].field">
+                                {{item.unVersion ? item.unVersion : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[8].visible" sortable="columns[8].field">
+                                {{item.unit ? item.unit : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[9].visible" sortable="columns[9].field">
+                                {{item.maxGrossWeight ? item.maxGrossWeight : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[10].visible" sortable="columns[10].field">
+                                {{item.sleeps ? item.sleeps : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[11].visible" sortable="columns[11].field">
+                                {{item.permeation ? item.permeation : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[12].visible" sortable="columns[12].field">
+                                {{item.aggregateState ? item.aggregateState : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[13].visible" sortable="columns[13].field">
+                                <lable ng-if="!item.fileFilename">N/A</lable>
+                                <a ng-if="item.fileFilename" ng-attr-href="file/{{item.id}}">{{item.fileFilename}}</a>
+                            </td>
+                            <td ng-show="columns[14].visible" sortable="columns[14].field">
+                                {{item.testMedium ? item.testMedium.infoList[0].medium : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[15].visible" sortable="columns[15].field">
+                                {{item.company ? item.company.name : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[16].visible" sortable="columns[16].field">
+                                {{item.assimilationList ? item.assimilationList.designation : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[17].visible" sortable="columns[17].field">
+                                {{item.packagingInstruction ? item.packagingInstruction.transportLaw : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[17].visible" sortable="columns[17].field">
+                                {{item.transport ? item.transport.verpGrp : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[18].visible" sortable="columns[18].field">
+                                <table class="table table-condensed table-bordered table-striped">
+                                    <tr ng-repeat="info in item.authorizationRooms">
+                                        <td class="lang-flag">
+                                            <img ng-attr-src="{{getImagePath(info)}}"/>
+                                        </td>
+                                        <td>{{info.roomName}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')">
+                                <a href="edit/{{item.id}}" th:utext="#{lnk.edit}"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')" style="text-align: right;">
+                        <button type="submit" class="btn btn-sm btn-default" style=" margin-top:5px;" th:utext="#{btn.remove}"></button>
+                    </div>
+                    <input type="hidden" ng-model="itemsCount" th:attr="ng-init='itemsCount=' + ${dataCount}"/>
+                    <input type="hidden" ng-model="actionPath" ng-init="actionPath='/unapproval/list-items'"/>
+                </form>
+            </div>
+            <div th:if="${dataCount == 0}" th:utext="#{info.list.data.found}"></div>
+        </div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/bootstrap-datepicker.css}" href="../static/css/bootstrap-datepicker.css" rel="stylesheet" media="screen"/>
+
+    <script src="../static/js/bootstrap-datepicker.js" th:src="@{/js/bootstrap-datepicker.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+
+        var options = [[${options}]];
+        var fields = [[${fields}]];
+        var object = 'container';
+        var itemsCount = [[${dataCount}]];
+        var columns = [
+            {title: [[#{label.container.name}]], field: 'name', visible: true},
+            {title: [[#{label.container.vps.number}]], field: 'vpsNumber', visible: true},
+            {title: [[#{label.container.nominal.volume}]], field: 'nominalVolume', visible: true},
+            {title: [[#{label.container.type}]], field: 'packagingForm', visible: true},
+            {title: [[#{label.container.image}]], field: 'image', visible: true},
+            {title: [[#{label.container.manufacturer}]], field: 'manufacturer', visible: true},
+            {title: [[#{label.container.approval}]], field: 'approval', visible: true},
+        ];
+
+        $(document).ready(function () {
+            $("#containersLink").attr("href", "#");
+        });
+        /*]]>*/
+    </script>
+    <script src="../static/js/container-search.js" th:src="@{/js/container-search.js}"></script>
+
+   <div class="content" id="containerSearchForms"  ng-controller="searchController" >
+       <table class="container-search"  >
+           <tr>
+               <td>
+                   <select name="field" class="form-control" ng-model="fieldName" ng-change="updateOptions(fieldName)">
+                       <option ng-repeat="field in fields" value="{{field.name}}">
+                           {{field.name}}
+                       </option>
+                   </select>
+               </td>
+               <td>
+                   <select ng-show="fieldOptions.length > 0" class="form-control" ng-model="option" >
+                       <option ng-repeat="option in fieldOptions" value="{{option.$name}}">
+                           {{option.$name}}
+                       </option>
+                   </select>
+               </td>
+               <td>
+                   <div ng-if="isTextField()">
+                       <input type="text" class="form-control fieldValue" placeholder="Enter a text" ng-model="value"/>
+                   </div>
+                   <div ng-if="isObjectField()">
+                       <select ng-model="selectedObject" ng-init="selectedObject = ''"
+                               ng-options="object.id as object.name for object in objectValues track by object.id"
+                               class="form-control" id="objectID">
+                           <option value="">-- Choose --</option>
+                       </select>
+                   </div>
+                   <div ng-if="isNumberField()">
+                       <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                              class="form-control fieldValue" placeholder="Type a number" ng-model="value"/>
+                   </div>
+                   <div ng-if="isEnumField()">
+                       <select ng-model="value" ng-init="value = ''" class="form-control">
+
+                       </select>
+                   </div>
+                   <div ng-if="isDateField()" ng-init="initDate()">
+                       <div class="input-group date " style="margin-bottom: 8px">
+                           <input type="text" id="dateField" ng-model="value" ng-init="value = ''"
+                                  th:placeholder="#{label.news.date}"
+                                  class="form-control datepicker fieldValue" style="width: 150px;" />
+                           <div class="input-group-addon">
+                               <span class="glyphicon glyphicon-th" style="height: 20px"></span>
+                           </div>
+                       </div>
+                   </div>
+               </td>
+               <!--<td>
+                   <div>
+                       <input type="text" name="fullText" style="display: none" class="form-control" placeholder="Enter The Text"/>
+                   </div>
+               </td>-->
+               <td style="text-align: right">
+                   <!--ng-click="search()"-->
+                   <button type="button" class="btn btn-sm btn-default" th:utext="#{btn.search}"
+                            ng-click="tableParams.sorting(columns[0].field, tableParams.isSortBy(columns[0].field, 'asc') ? 'desc' : 'asc')">search</button>
+               </td>
+           </tr>
+       </table>
+       <div th:if="${dataCount > 0}">
+           <div class="btn-group">
+               <label class="btn btn-primary"
+                      ng-repeat="column in columns"
+                      ng-bind-html="column.title"
+                      ng-class="column.visible ? 'btn btn-primary ng-scope ng-binding' : 'btn btn-primary ng-scope ng-binding column-unchecked'">
+                   <input type="checkbox" ng-model="column.visible" ng-click="alert(column.visible);" />
+               </label>
+           </div>
+           <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped listItems">
+               <thead>
+               <tr>
+                   <th ></th>
+                   <th ng-repeat="column in columns" ng-show="column.visible"
+                       ng-bind-html="column.title"
+                       class="text-center sortable"  ng-class="{
+                                        'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                        'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                                      }" style="vertical-align: top; text-align: center; min-width: 90px;"
+                       ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+
+                   </th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr ng-repeat="item in $data" ng-class-even="'tbl-row-even'">
+                   <td >
+                       {{item.vpsNumber ? item.vpsNumber : '-' }}
+                   </td>
+                   <td ng-show="columns[0].visible" sortable="columns[0].field">
+                       {{item.name ? item.name : '-'}}
+                   </td>
+                   <td ng-show="columns[1].visible" sortable="columns[1].field">
+                       {{item.vpsNumber ? item.vpsNumber : '-'}}
+                   </td>
+                   <td ng-show="columns[2].visible" sortable="columns[2].field">
+                       {{item.nominalVolume ? item.nominalVolume : '-'}}
+                   </td>
+                   <td ng-show="columns[3].visible" sortable="columns[3].field">
+                       {{item.packagingForm ? item.packagingForm : '-'}}
+                   </td>
+                   <td ng-show="columns[4].visible" sortable="columns[4].field">
+                       <label ng-if="!hasPhoto(item)" th:utext="#{msg.info.data.not.available}"/>
+                       <a ng-if="hasPhoto(item)" ng-click="showPhoto(item)" style="cursor: pointer;">
+                          qq {{item.fileName}}
+                       </a>
+                   </td>
+                   <td ng-show="columns[5].visible" sortable="columns[5].field">
+                       {{item.manufacturer ? item.manufacturer  : '-'}}
+                   </td>
+                   <td ng-show="columns[6].visible" sortable="columns[6].field">
+                       {{item.approval ? item.approval  : '-'}}
+                   </td>
+               </tr>
+               </tbody>
+           </table>
+           <input type="hidden" ng-model="itemsCount" th:attr="ng-init='itemsCount=' + ${dataCount}"/>
+           <input type="hidden" ng-model="actionPath" ng-init="actionPath='/admin/user/list-items'"/>
+
+       </div>
+       <div th:if="${dataCount == 0}" th:utext="#{info.list.data.found}"></div>
+       <div th:replace="dialog/dlg-image :: imageDialog"></div>
+   </div>
+</div>
+</body>
+</html>

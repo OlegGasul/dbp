@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='location'"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+	<div th:fragment="content" class="content">
+
+        <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var object = 'location';
+            var itemsCount = [[${dataCount}]];
+            var columns = [
+                {title: [[#{label.location.name}]], field: 'name', visible: true},
+                {title: [[#{label.location.sapcode}]], field: 'sapcode', visible: true},
+                {title: [[#{label.location.others}]], field: 'others', visible: true},
+                {title: [[#{label.location.address.country}]], field: 'country', visible: true},
+                {title: [[#{label.location.address.city}]], field: 'city', visible: true},
+                {title: [[#{label.location.address.street}]], field: 'street', visible: true},
+                {title: [[#{label.location.address.zipcode}]], field: 'zipcode', visible: true}
+            ];
+            /*]]>*/
+        </script>
+        <script src="../static/js/object-list.js" th:src="@{/js/object-list.js}"></script>
+
+        <div th:if="${message != null}" class="alert alert-success">
+            <strong th:text="${message}"></strong>
+        </div>
+
+		<div class="page-container" style="display: block; height: 30px; padding: 0; margin: 0 0 10px 0;">
+            <span th:utext="#{title.location.form}"/>
+			<button type="button" class="btn btn-sm btn-default" onclick="document.location='add'" style="float:right;"
+                    sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')" th:utext="#{btn.create}">
+				Create New
+			</button>
+		</div>
+
+        <div ng-controller="objectListController" id="listContent">
+            <div th:if="${dataCount > 0}">
+                <form action="#" th:action="@{/location/remove}" method="post">
+                    <div class="btn-group">
+                        <label class="btn btn-primary"
+                               ng-repeat="column in columns"
+                               ng-class="column.visible ? 'btn btn-primary ng-scope ng-binding' : 'btn btn-primary ng-scope ng-binding column-unchecked'">
+                            <input type="checkbox" ng-model="column.visible" ng-click="alert(column.visible);" />
+                            <span ng-bind-html="column.title"/>
+                        </label>
+                    </div>
+                    <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped listItems">
+                        <thead>
+                        <tr>
+                            <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                            <th ng-repeat="column in columns" ng-show="column.visible"
+                                ng-bind-html="column.title"
+                                class="text-center sortable"  ng-class="{
+                                        'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                                        'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                                      }" style="vertical-align: top; text-align: center; min-width: 90px;"
+                                ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+
+                            </th>
+                            <th sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in $data" ng-class-even="'tbl-row-even'">
+                            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                <input type="checkbox" name="id" value="{{item.id}}"/>
+                            </td>
+                            <td ng-show="columns[0].visible" sortable="columns[0].field">
+                                {{item.name ? item.name : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[1].visible" sortable="columns[1].field">
+                                {{item.sapCode ? item.sapCode : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[2].visible" sortable="columns[2].field">
+                                {{item.others ? item.others : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[3].visible" sortable="columns[3].field">
+                                {{item.others ? item.others : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[4].visible" sortable="columns[4].field">
+                                {{item.address ? (item.address.country ? item.address.country.currentInfo.name : 'N/A') : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[5].visible" sortable="columns[5].field">
+                                {{item.address ? (item.address.city ? item.address.city : 'N/A') : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[6].visible" sortable="columns[6].field">
+                                {{item.address ? (item.address.street ? item.address.street : 'N/A') : 'N/A'}}
+                            </td>
+                            <td ng-show="columns[7].visible" sortable="columns[7].field">
+                                {{item.address ? (item.address.zipCode ? item.address.zipCode : 'N/A') : 'N/A'}}
+                            </td>
+                            <td sec:authorize="hasAnyRole('ROLE_WRITER', 'ROLE_ADMIN')">
+                                <a href="edit/{{item.id}}" th:utext="#{lnk.edit}"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')" style="text-align: right;">
+                        <button type="submit" class="btn btn-sm btn-default" style=" margin-top:5px;" th:utext="#{btn.remove}"></button>
+                    </div>
+                    <input type="hidden" ng-model="itemsCount" th:attr="ng-init='itemsCount=' + ${dataCount}"/>
+                    <input type="hidden" ng-model="actionPath" ng-init="actionPath='/location/list-items'"/>
+                </form>
+            </div>
+            <div th:if="${dataCount == 0}" th:utext="#{info.list.data.found}"></div>
+        </div>
+	</div>
+</body>
+</html>

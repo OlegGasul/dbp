@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="content">
+    <div th:each="item : ${data}">
+        <div th:if="${item.currentInfo != null}">
+            <h3 class="title" th:utext="${item.currentInfo.title}"></h3>
+            <div class="text" th:utext="${item.currentInfo.text}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

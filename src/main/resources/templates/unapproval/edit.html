@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='unapproval'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/bootstrap-datepicker.css}" href="../static/css/bootstrap-datepicker.css" rel="stylesheet" media="screen"/>
+
+    <script src="http://cdn.jsdelivr.net/webjars/angularjs/1.5.0/angular-animate.min.js"
+            th:src="@{/webjars/angularjs/1.5.0/angular-animate.min.js}"></script>
+
+    <script src="../static/js/bootstrap-datepicker.js" th:src="@{/js/bootstrap-datepicker.js}"></script>
+    <script src="../static/js/ng-tags-input.min.js" th:src="@{/js/ng-tags-input.min.js}"></script>
+    <script src="../static/js/unapproval.js" th:src="@{/js/unapproval.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="unapprovalController">
+        <form enctype="multipart/form-data" action="#" autocomplete="on" th:action="@{/unapproval/edit}" th:object="${unapproval}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.approval.form.edit}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.densityX}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{densityX}" th:placeholder="#{label.approval.densityX}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('densityX')}" th:errors="*{densityX}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.densityY}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{densityY}" th:placeholder="#{label.approval.densityY}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('densityY')}" th:errors="*{densityY}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.densityZ}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{densityZ}" th:placeholder="#{label.approval.densityZ}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('densityZ')}" th:errors="*{densityZ}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.unCode}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{unCode}" th:placeholder="#{label.approval.unCode}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('unCode')}" th:errors="*{unCode}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.vaporPressure50}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{vaporPressure50}" th:placeholder="#{label.approval.vaporPressure50}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('vaporPressure50')}" th:errors="*{vaporPressure50}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.vaporPressure55}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{vaporPressure55}" th:placeholder="#{label.approval.vaporPressure55}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('vaporPressure55')}" th:errors="*{vaporPressure55}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.dateOfIssue}"/>
+                    </td>
+                    <td class="input-group date " style="margin-bottom: 8px" ><!--data-provide="datepicker"-->
+                        <input type="text"
+                               th:field="*{dateOfIssue}"
+                               th:value="${unapproval.dateOfIssue != null ? #dates.format(unapproval.dateOfIssue, 'MM/dd/yyyy') : ''}"
+                               th:placeholder="#{label.approval.dateOfIssue}"
+                               onkeydown="return false"
+                               class="form-control datepicker"/>
+                        <div class="input-group-addon" >
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </td>
+                    <td th:if="${#fields.hasErrors('dateOfIssue')}" th:errors="*{dateOfIssue}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.unVersion}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{unVersion}" th:placeholder="#{label.approval.unVersion}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('unVersion')}" th:errors="*{unVersion}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.unit}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{unit}" th:placeholder="#{label.approval.unit}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.maxGrossWeight}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{maxGrossWeight}" th:placeholder="#{label.approval.maxGrossWeight}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('maxGrossWeight')}" th:errors="*{maxGrossWeight}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.sleeps}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{sleeps}" th:placeholder="#{label.approval.sleeps}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('sleeps')}" th:errors="*{sleeps}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.permeation}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{permeation}" th:placeholder="#{label.approval.permeation}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('permeation')}" th:errors="*{permeation}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.aggregateState}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{aggregateState}" th:placeholder="#{label.approval.aggregateState}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('aggregateState')}" th:errors="*{aggregateState}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.testMedium}"/>
+                    </td>
+                    <td>
+                        <tags-input ng-model="testMediumTags"
+                                    min-tags="1"
+                                    max-tags="1"
+                                    display-property="name"
+                                    on-tag-added="testMediumSelected($tag)"
+                                    on-tag-removed="testMediumRemoved($tag)"
+                                    add-on-enter="false"
+                                    add-on-comma="false"
+                                    add-on-blur="false"
+                                    placeholder="Type a Medium object"
+                                    addFromAutocompleteOnly="true">
+                            <auto-complete source="loadTestMediums($query)"></auto-complete>
+                        </tags-input>
+                        <input type="hidden" id="testMediumId"
+                               th:attr="name='testMedium.id'"
+                               th:value="${unapproval.testMedium != null ? unapproval.testMedium.id : ''}"/>
+                        <input type="hidden" id="testMediumName"
+                               th:attr="name='testMedium.infoList[0].testMedium'"
+                               th:value="${unapproval.testMedium != null ? unapproval.testMedium.infoList[0].medium : ''}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('testMedium')}" th:errors="*{testMedium}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.company}"/>
+                    </td>
+                    <td>
+                        <tags-input ng-model="companyTags"
+                                    min-tags="1"
+                                    max-tags="1"
+                                    display-property="name"
+                                    on-tag-added="companySelected($tag)"
+                                    on-tag-removed="companyRemoved($tag)"
+                                    add-on-enter="false"
+                                    add-on-comma="false"
+                                    add-on-blur="false"
+                                    placeholder="Type a Company object"
+                                    addFromAutocompleteOnly="true">
+                            <auto-complete source="loadCompanies($query)"></auto-complete>
+                        </tags-input>
+                        <input type="hidden" id="companyId"
+                               th:attr="name='company.id'"
+                               th:value="${unapproval.company != null ? unapproval.company.id : ''}"/>
+                        <input type="hidden" id="companyName"
+                               th:attr="name='company.name'"
+                               th:value="${unapproval.company != null ? unapproval.company.name : ''}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('company')}" th:errors="*{company}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.assimilationList}"/>
+                    </td>
+                    <td>
+                        <tags-input ng-model="assimilationListTags"
+                                    min-tags="1"
+                                    max-tags="1"
+                                    display-property="name"
+                                    on-tag-added="assimilationListSelected($tag)"
+                                    on-tag-removed="assimilationListRemoved($tag)"
+                                    add-on-enter="false"
+                                    add-on-comma="false"
+                                    add-on-blur="false"
+                                    placeholder="Type a Assimilation object"
+                                    addFromAutocompleteOnly="true">
+                            <auto-complete source="loadAssimilationLists($query)"></auto-complete>
+                        </tags-input>
+                        <input type="hidden" id="assimilationListId"
+                               th:attr="name='assimilationList.id'"
+                               th:value="${unapproval.assimilationList != null ? unapproval.assimilationList.id : ''}"/>
+                        <input type="hidden" id="assimilationListName"
+                               th:attr="name='assimilationList.designation'"
+                               th:value="${unapproval.assimilationList != null ? unapproval.assimilationList.designation : ''}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('assimilationList')}" th:errors="*{assimilationList}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.packaging.instruction}"/>
+                    </td>
+                    <td>
+                        <tags-input ng-model="packagingInstructionTags"
+                                    min-tags="1"
+                                    max-tags="1"
+                                    display-property="name"
+                                    on-tag-added="packagingInstructionSelected($tag)"
+                                    on-tag-removed="packagingInstructionRemoved($tag)"
+                                    add-on-enter="false"
+                                    add-on-comma="false"
+                                    add-on-blur="false"
+                                    placeholder="Type a Packaging Instruction object"
+                                    addFromAutocompleteOnly="true">
+                            <auto-complete source="loadPackagingInstructions($query)"></auto-complete>
+                        </tags-input>
+                        <input type="hidden" id="packagingInstructionId"
+                               th:attr="name='packagingInstruction.id'"
+                               th:value="${unapproval.packagingInstruction != null ? unapproval.packagingInstruction.id : ''}"/>
+                        <input type="hidden" id="packagingInstructionName"
+                               th:attr="name='packagingInstruction.transportLaw'"
+                               th:value="${unapproval.packagingInstruction != null ? unapproval.packagingInstruction.transportLaw : ''}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('packagingInstruction')}" th:errors="*{packagingInstruction}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.transport}"/>
+                    </td>
+                    <td>
+                        <tags-input ng-model="transportTags"
+                                    min-tags="1"
+                                    max-tags="1"
+                                    display-property="name"
+                                    on-tag-added="transportSelected($tag)"
+                                    on-tag-removed="transportRemoved($tag)"
+                                    add-on-enter="false"
+                                    add-on-comma="false"
+                                    add-on-blur="false"
+                                    placeholder="Type a Transport object"
+                                    addFromAutocompleteOnly="true">
+                            <auto-complete source="loadTransports($query)"></auto-complete>
+                        </tags-input>
+                        <input type="hidden" id="transportId"
+                               th:attr="name='transport.id'"
+                               th:value="${unapproval.transport != null ? unapproval.transport.id : ''}"/>
+                        <input type="hidden" id="transportName"
+                               th:attr="name='transport.verpGrp'"
+                               th:value="${unapproval.transport != null ? unapproval.transport.verpGrp : ''}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('transport')}" th:errors="*{transport}" class="field-error"></td>
+                </tr>
+
+                <tr th:each="info, status : *{authorizationRooms}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.approval.roomName}">Room Name</label>>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='authorizationRooms[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='authorizationRooms[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{authorizationRooms[__${status.index}__].roomName}"
+                               th:placeholder="name" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('authorizationRooms[' + status.index + '].roomName')}"
+                        th:errors="*{authorizationRooms[__${status.index}__].type}" class="field-error"></td>
+                </tr>
+                <tr th:if="*{fileFilename != null}">
+                    <td>
+                        <label th:utext="#{label.approval.file}"/>
+                    </td>
+                    <td>
+                        <a id="certDFCLink" ng-show="!fileRemoved"
+                           th:href="@{/unapproval/file/{id}(id=*{id})}"
+                           th:text="*{fileFilename}"></a>
+                        <label ng-show="fileRemoved" th:text="*{fileFilename}"></label>
+                        <input type="hidden" id="fileFilename"
+                               th:attr="name='fileFilename'" th:value="*{fileFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.file}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file2" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('fileFilename')}" th:errors="*{fileFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.approval.remove}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="fileRemoved" ng-model="fileRemoved" ng-click="fileRemovedChanged()"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="submit" th:utext="#{btn.edit}" class="btn btn-sm btn-default">edit</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

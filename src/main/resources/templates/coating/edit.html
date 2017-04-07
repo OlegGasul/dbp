@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='coating'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <script src="../static/js/coating.js" type="text/javascript" th:src="@{/js/coating.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="coatingController">
+        <form action="#" th:action="@{/coating/edit}" th:object="${coating}" enctype="multipart/form-data" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.coating.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coating.swCodeCoating}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{swCodeCoating}" th:placeholder="swCodeCoating" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('swCodeCoating')}" th:errors="*{swCodeCoating}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coating.swCodeHierarchy}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{swCodeHierarchy}" th:placeholder="swCodeHierarchy" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('swCodeHierarchy')}" th:errors="*{swCodeHierarchy}" class="field-error"></td>
+                </tr>
+                <tr th:if="*{certDFCFilename != null}">
+                    <td>
+                        <label th:utext="#{label.coating.certificateDFC}"/>
+                    </td>
+                    <td>
+                        <a id="certDFCLink" ng-show="!certRemoved"
+                           th:href="@{/coating/certDFCF/{id}(id=*{id})}"
+                           th:text="*{certDFCFilename}"></a>
+                        <label ng-show="certRemoved" th:text="*{certDFCFilename}"></label>
+                        <input type="hidden" id="certDFCFilename"
+                               th:attr="name='certDFCFilename'" th:value="*{certDFCFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coating.certificateDFC}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('certDFCFilename')}" th:errors="*{certDFCFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coating.removeCerificate}" />
+                    </td>
+                    <td>
+                        <input type="checkbox" name="certRemoved" ng-model="certRemoved" ng-click="certRemovedChanged()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coating.remarks}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{remarks}" th:placeholder="remarks" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coating.utilisation}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{utilisation}" th:placeholder="utilisation" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('utilisation')}" th:errors="*{utilisation}" class="field-error"></td>
+                </tr>
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.coating.description}">Description</label>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].description}"
+                               th:placeholder="description" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].description')}"
+                        th:errors="*{infoList[__${status.index}__].description}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

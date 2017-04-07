@@ -1,0 +1,44 @@
+# production
+spring.datasource:
+  driverClassName: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/packagingdb?useUnicode=yes&characterEncoding=UTF8&autoReconnect=true
+  username: pmd
+  password: pmd
+  maximumPoolSize: 10
+  validation-query: SELECT 1 FROM dual
+
+spring.jpa:
+  hibernate:
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    ddl-auto: update
+  show-sql: true
+
+spring.thymeleaf:
+  cache: false
+
+hibernate.ejb.use_class_enhancer: true
+
+mail:
+  debug: true
+  transport:
+    protocol: smtp
+  sender:
+    email: noreply@m-exchange.de
+    name: Email Name
+  smtp:
+    port: 25
+    host: 10.201.0.14
+    auth: false
+    login: 
+    password: 
+    ssl: false
+    socketFactory:
+      port: 465
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: ae
+    starttls:
+      enable: false
+      required: false
+  to: oliver.david@m-exchange.de
+
+spring.velocity.resource-loader-path: classpath:/templates/vm

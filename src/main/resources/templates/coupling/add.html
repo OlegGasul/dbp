@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='coupling'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <script src="../static/js/ng-tags-input.min.js" th:src="@{/js/ng-tags-input.min.js}"></script>
+    <script src="../static/js/coupling.js" th:src="@{/js/coupling.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="couplingController">
+        <form enctype="multipart/form-data" action="#" autocomplete="on" th:action="@{/coupling/add}" th:object="${coupling}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.coupling.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.pipeDiameter}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]" th:field="*{pipeDiameter}" th:placeholder="#{label.coupling.form.pipeDiameter}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('pipeDiameter')}" th:errors="*{pipeDiameter}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.others}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{others}" th:placeholder="#{label.coupling.form.others}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('others')}" th:errors="*{others}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.material}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{material.id}" >
+                            <option value="">-- Choose Material --</option>
+                            <option th:each="material : ${materials}"
+                                    th:value="${material.id}"
+                                    th:text="${material.name}">
+                                Material
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('material')}" th:errors="*{material}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.gasket}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{gasket.id}" >
+                            <option value="">-- Choose Gasket --</option>
+                            <option th:each="gasket : ${gaskets}"
+                                    th:value="${gasket.id}"
+                                    th:text="${gasket.name}">
+                                Material
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('gasket')}" th:errors="*{gasket}" class="field-error"></td>
+                </tr>
+
+                <tr th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.coupling.form.description}">Description</label>
+                    </td>
+                    <td>
+                        <img th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${lang}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].description}"
+                               th:placeholder="#{label.coupling.form.description}" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].description')}"
+                        th:errors="*{infoList[__${status.index}__].description}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.image}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('imageFilename')}" th:errors="*{imageFilename}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.drawing}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file2" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('drawingFilename')}" th:errors="*{drawingFilename}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

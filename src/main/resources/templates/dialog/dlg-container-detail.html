@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <div th:fragment="containerDetailDialog">
+        <!-- Item DetailDialog -->
+        <div class="modal fade" id="dlgItemDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 800px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">
+                            Item Detail
+                        </h4>
+                    </div>
+                    <div class="modal-body" style="max-height: calc(100vh - 110px); overflow-y: auto; margin-bottom: 10px;">
+                        <div>
+                            <table class="table table-condensed table-bordered table-striped">
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.name}"/>
+                                    </td>
+                                    <td>
+                                        N/A
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.vps.number}"/>
+                                    </td>
+                                    <td>
+                                        N/A
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.nominal.volume}"/>
+                                    </td>
+                                    <td>
+                                        {{item.nominalValue}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.type}"/>
+                                    </td>
+                                    <td>
+                                        {{item.type}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.manufacturer}"/>
+                                    </td>
+                                    <td>
+                                        N/A
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.approval}"/>
+                                    </td>
+                                    <td>
+                                        N/A
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.sap.code}"/>
+                                    </td>
+                                    <td>
+                                        {{item.sapCode}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.local.code}"/>
+                                    </td>
+                                    <td>
+                                        {{item.localCode}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.global.code}"/>
+                                    </td>
+                                    <td>
+                                        {{item.globalCode}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.status}"/>
+                                    </td>
+                                    <td>
+                                        {{item.status.title}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.location}"/>
+                                    </td>
+                                    <td>
+                                        {{item.location.name}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.business.unit}"/>
+                                    </td>
+                                    <td>
+                                        {{item.businessUnit.currentInfo.name}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:utext="#{label.container.designation}"/>
+                                    </td>
+                                    <td>
+                                        {{item.designation}}
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr/>
+                            <table class="table table-condensed table-bordered table-striped"
+                                   ng-bind-html="containerDetails()"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

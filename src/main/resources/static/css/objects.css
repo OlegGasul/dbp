@@ -1,0 +1,83 @@
+.content {
+	/*width: 830px;*/
+    width: 100%;
+	min-height: 550px;
+	background-color: #eee;
+	padding: 20px;
+	border-radius: 5px;
+	border: 2px solid #eed;
+}
+.content .title{
+    font-size: 16px;
+}
+
+.content .alert{
+    margin: 10px auto;
+}
+.content div.bootstrap-select{
+    width: 300px!important;
+    margin-left: 228px!important;
+    margin-bottom: 30px!important;
+}
+.content table caption {
+    font-size: 18px;
+}
+.content table label {
+    margin-right: 10px;
+}
+input[type='text'] {
+	width: 300px;
+}
+.name-flag {
+    float: left;
+    position: absolute;
+    height: 33px;
+    margin-left: 5px;
+}
+.lang-flag{
+    width: 38px;
+    text-align: left!important;
+}
+.lang-flag img {
+    position: absolute;
+    height: 33px;
+    margin-top: -7px;
+    margin-left: -3px
+}
+.forms {
+    margin-bottom: 20px;
+}
+.forms hr {
+    border-top: 1px solid #fff;
+}
+.container-list{
+    width: 960px;
+}
+.listItems{
+    margin-top: 10px;
+}
+.tbl-row-even{
+    background-color: #F7F6F6;
+}
+.ng-table td {
+    text-align: center;
+}
+.ng-table-pager {
+    width: 100%;
+    float: left;
+    margin-right: 10px;
+}
+.ng-table-pagination{
+   margin: 0;
+}
+
+table.container-search td{
+   padding: 5px;
+}
+table.container-search select {
+    width: 200px;
+}
+
+.forms select {
+    width: 300px;
+}

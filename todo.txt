@@ -1,0 +1,13 @@
+1. Rename AssimilationList domain object to UnAssimilationList
+2. Rename property certDFCF on Coating to certDFC
+3. Confirmation dialog on remove
+4. filter, sorting layout
+5. auto complete change to combo box
+6. news dto validation
+7. check container transformer fields
+8. container not nullable fields
+9. container missing fields
+10.container file fields
+11.export container
+12.design
+13.language support (login)

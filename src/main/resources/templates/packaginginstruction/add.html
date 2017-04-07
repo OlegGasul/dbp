@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='packaginginstruction'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms">
+        <form action="#" th:action="@{/packaginginstruction/add}" th:object="${packagingInstruction}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.packaging.instruction.form}"></caption>
+                <!--properties start-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.transportlaw}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{transportLaw}" th:placeholder="#{label.packaging.instruction.form.transportlaw}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('transportLaw')}" th:errors="*{transportLaw}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.verpprovision}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{verpProvision}" th:placeholder="#{label.packaging.instruction.form.verpprovision}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('verpProvision')}" th:errors="*{verpProvision}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.packoutside}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{packOutside}" th:placeholder="#{label.packaging.instruction.form.packoutside}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('packOutside')}" th:errors="*{packOutside}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.packinside}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{packInside}" th:placeholder="#{label.packaging.instruction.form.packinside}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('packInside')}" th:errors="*{packInside}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.volvergrpii}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{volVerGrpII}" th:placeholder="#{label.packaging.instruction.form.volvergrpii}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('volVerGrpII')}" th:errors="*{volVerGrpII}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.volvergrpiii}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{volVerGrpIII}" th:placeholder="#{label.packaging.instruction.form.volvergrpiii}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('volVerGrpIII')}" th:errors="*{volVerGrpIII}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.packaging.instruction.form.bme}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{BME}" th:placeholder="#{label.packaging.instruction.form.bme}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('BME')}" th:errors="*{BME}" class="field-error"></td>
+                </tr>
+                <!--properties end-->
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

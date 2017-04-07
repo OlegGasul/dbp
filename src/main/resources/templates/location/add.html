@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='location'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms">
+        <form action="#" th:action="@{/location/add}" th:object="${location}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.location.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.sapcode}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{sapCode}" th:placeholder="#{label.container.sap.code}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('sapCode')}" th:errors="*{sapCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.name}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{name}" th:placeholder="name" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.others}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{others}" th:placeholder="others" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('others')}" th:errors="*{others}" class="field-error"></td>
+                </tr>
+                <!-- Address -->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.address.country}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{address.country.id}" >
+                            <option th:each="country : ${countries}"
+                                    th:value="${country.id}"
+                                    th:text="${country.currentInfo.name}">
+                                Country
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.country')}" th:errors="*{address.country}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.address.city}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{address.city}" th:placeholder="city" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.address.street}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{address.street}" th:placeholder="street" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.street')}" th:errors="*{address.street}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.location.address.zipcode}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{address.zipCode}" th:placeholder="zipcode" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('address.zipCode')}" th:errors="*{address.zipCode}" class="field-error"></td>
+                </tr>
+                <!-- end of address-->
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

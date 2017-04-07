@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div th:fragment="content">
+
+    <link th:href="@{/css/select/bootstrap-select.min.css}" href="../static/css/select/bootstrap-select.min.css" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/ng-tags-input.min.css}" href="../static/css/ng-tags-input.min.css" rel="stylesheet" media="screen"/>
+	<link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+	<script th:inline="javascript">
+		var selected = [[${selectedObject}]]
+	</script>
+	<script src="../static/js/select/bootstrap-select.min.js" th:src="@{/js/select/bootstrap-select.min.js}"></script>
+	<script src="../static/js/objects-registration.js" th:src="@{/js/objects-registration.js}"></script>
+
+	<div class="objects-registration content" ng-controller="objectsRegistration">
+		<div th:if="${message != null}" class="alert alert-success">
+            <strong th:text="${message}"></strong>
+        </div>
+		<div>
+            <select id="objectForms" ng-model="selectedForm" class="selectpicker show-tick form-control">
+                <option value="-1" style="font-style: italic; font-size: 12px;">
+                    Nothing selected
+                </option>
+                <option ng-repeat="item in objects" value="{{item.id}}">
+                    {{item.name}}
+                </option>
+                <optgroup label="Containers" data-subtext="forms">
+                    <option ng-repeat="groupItem in containerObjects" value="{{groupItem.id}}">
+                        {{groupItem.name}}
+                    </option>
+                </optgroup>
+            </select>
+		</div>
+		<div id="coating-form" class="forms" ng-show="selectedForm == 'coating-form'">
+			<form action="#" th:action="@{/objects/addCoating}" th:object="${coating}" method="post">
+				<table style="margin: 0 auto">
+                    <caption th:utext="#{title.coating.form}"></caption>
+					<tr>
+						<td>
+							<input type="text" th:field="*{swCodeCoating}" th:placeholder="swCodeCoating" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('swCodeCoating')}" th:errors="*{swCodeCoating}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{swCodeHierarchy}" th:placeholder="swCodeHierarchy" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('swCodeHierarchy')}" th:errors="*{swCodeHierarchy}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{certificateDFC}" th:placeholder="certificateDFC" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('certificateDFC')}" th:errors="*{certificateDFC}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{remarks}" th:placeholder="remarks" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{utilisation}" th:placeholder="utilisation" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('utilisation')}" th:errors="*{utilisation}" class="field-error"></td>
+					</tr>
+                    <tr th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+                        <td>
+                            <img th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class="name-flag"/>
+                            <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${lang}"/>
+                            <input type="text" th:field="*{infoList[__${status.index}__].description}"
+                                   th:placeholder="description" class="form-control" style="padding-left: 40px;"/>
+                        </td>
+                        <td th:if="${#fields.hasErrors('infoList[' + status.index + '].description')}"
+                            th:errors="*{infoList[__${status.index}__].description}" class="field-error"></td>
+                    </tr>
+					<tr>
+						<td style="text-align: right;">
+							<button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-primary">save</button>
+						</td>
+						<td th:if="${#fields.hasErrors('*')}"></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<div id="businessUnit-form" class="forms" ng-show="selectedForm == 'businessUnit-form'">
+			<form action="#" th:action="@{/objects/addBusinessUnit}" th:object="${businessUnit}" method="post">
+				<table style="margin: 0 auto">
+                    <caption th:utext="#{title.business.unit.form}"></caption>
+					<tr>
+						<td>
+							<input type="text" th:field="*{matchCode}" th:placeholder="matchCode" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('matchCode')}" th:errors="*{matchCode}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" th:field="*{misc}" th:placeholder="misc" class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('misc')}" th:errors="*{misc}" class="field-error"></td>
+					</tr>
+                    <tr th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+                        <td>
+                            <img th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class="name-flag"/>
+                            <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${lang}"/>
+                            <input type="text" th:field="*{infoList[__${status.index}__].name}"
+                                   th:placeholder="name" class="form-control" style="padding-left: 40px;"/>
+                        </td>
+                        <td th:if="${#fields.hasErrors('infoList[' + status.index + '].name')}"
+                            th:errors="*{infoList[__${status.index}__].name}" class="field-error"></td>
+                    </tr>
+					<tr>
+						<td style="text-align: right;">
+							<button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-primary">save</button>
+						</td>
+						<td th:if="${#fields.hasErrors('*')}"></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<div id="cubic-form" class="forms" ng-show="selectedForm == 'cubic-form'">
+			<form action="#" th:action="@{/objects/addCubic}" th:object="${cubic}" method="post">
+				<table style="margin: 0 auto">
+                    <caption th:utext="#{title.business.unit.form}"></caption>
+					<tr>
+						<td>
+							<input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}" th:field="*{overflowVolume}" th:placeholder="#{label.container.overflow.volume}"  class="form-control"/>
+						</td>
+						<td th:if="${#fields.hasErrors('overflowVolume')}" th:errors="*{overflowVolume}" class="field-error"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">
+							<button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-primary">save</button>
+						</td>
+						<td th:if="${#fields.hasErrors('*')}"></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+        <div style="width: 300px; margin-top:100px;">
+            <tags-input ng-model="tags"
+                        min-tags="1"
+                        max-tags="1"
+                        display-property="name"
+                        add-on-enter="false"
+                        add-on-comma="false"
+                        add-on-blur="false"
+                        placeholder="Add a Business Unit object just for a test"
+                        addFromAutocompleteOnly="true">
+                <auto-complete source="loadBusinessUnits($query)"></auto-complete>
+            </tags-input>
+        </div>
+	</div>
+</div>
+</body>
+</html>

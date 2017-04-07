@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='coupling'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <script src="../static/js/ng-tags-input.min.js" th:src="@{/js/ng-tags-input.min.js}"></script>
+    <script src="../static/js/coupling.js" th:src="@{/js/coupling.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="couplingController">
+        <form enctype="multipart/form-data" action="#" th:action="@{/coupling/edit}" th:object="${coupling}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.coupling.form.edit}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.pipeDiameter}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]" th:field="*{pipeDiameter}" th:placeholder="#{label.coupling.form.pipeDiameter}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('pipeDiameter')}" th:errors="*{pipeDiameter}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.others}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{others}" th:placeholder="#{label.coupling.form.others}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('others')}" th:errors="*{others}" class="field-error"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.material}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{material.id}" >
+                            <option value="">-- Choose Material --</option>
+                            <option th:each="material : ${materials}"
+                                    th:value="${material.id}"
+                                    th:text="${material.name}">
+                                Material
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('material')}" th:errors="*{material}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.gasket}"/>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{gasket.id}" >
+                            <option value="">-- Choose Gasket --</option>
+                            <option th:each="gasket : ${gaskets}"
+                                    th:value="${gasket.id}"
+                                    th:text="${gasket.name}">
+                                Material
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('gasket')}" th:errors="*{gasket}" class="field-error"></td>
+                </tr>
+
+                <tr th:each="info, status : *{infoList}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.coating.description}">Description</label>
+                    </td>
+                    <td colspan="2">
+                        <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].description}"
+                               th:placeholder="description" class="form-control" style="padding-left: 40px;"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].description')}"
+                        th:errors="*{infoList[__${status.index}__].description}" class="field-error"></td>
+                </tr>
+
+                <tr th:if="*{imageFilename != null}">
+                    <td>
+                        <label th:utext="#{label.coupling.form.image}"/>
+                    </td>
+                    <td>
+                        <a id="imageLink" ng-show="!imageRemoved"
+                           th:href="@{/coupling/image/{id}(id=*{id})}"
+                           th:text="*{imageFilename}"></a>
+                        <label ng-show="imageRemoved" th:text="*{imageFilename}"></label>
+                        <input type="hidden" id="imageFilename" th:attr="name='imageFilename'" th:value="*{imageFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.image}"/>
+                    </td>
+                    <td>
+                        <input id="file1" type="file" name="file" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('imageFilename')}" th:errors="*{imageFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.image.remove}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="imageRemoved" ng-model="imageRemoved" ng-click="imageRemovedChanged(1)"/>
+                    </td>
+                </tr>
+
+                <tr th:if="*{imageFilename != null}">
+                    <td>
+                        <label th:utext="#{label.coupling.form.drawing}"/>
+                    </td>
+                    <td>
+                        <a id="imageLink" ng-show="!drawingRemoved"
+                           th:href="@{/coupling/drawing/{id}(id=*{id})}"
+                           th:text="*{drawingFilename}"></a>
+                        <label ng-show="drawingRemoved" th:text="*{drawingFilename}"></label>
+                        <input type="hidden" id="drawingFilename" th:attr="name='drawingFilename'" th:value="*{drawingFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.drawing}"/>
+                    </td>
+                    <td>
+                        <input id="file2" type="file" name="file2" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('drawingFilename')}" th:errors="*{drawingFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.coupling.form.drawing.remove}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="drawingRemoved" ng-model="drawingRemoved" ng-click="imageRemovedChanged(2)"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

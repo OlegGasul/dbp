@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='news'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/bootstrap-datepicker.css}" href="../static/css/bootstrap-datepicker.css" rel="stylesheet" media="screen"/>
+    <script src="../static/js/coating.js" type="text/javascript" th:src="@{/js/news.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/angularjs/1.5.0/angular-animate.min.js"
+            th:src="@{/webjars/angularjs/1.5.0/angular-animate.min.js}"></script>
+
+    <script src="../static/js/bootstrap-datepicker.js" th:src="@{/js/bootstrap-datepicker.js}"></script>
+    <script src="../static/js/ng-tags-input.min.js" th:src="@{/js/ng-tags-input.min.js}"></script>
+
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+
+        $(function () {
+            $(".datepicker1").datepicker();
+            $(".datepicker2").datepicker();
+        });
+
+        /*]]>*/
+    </script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="newsController">
+        <form action="#"  th:action="@{/news/edit}" th:object="${news}" enctype="multipart/form-data" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.news.form}"></caption>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.news.date}"/>
+                    </td>
+                    <td class="input-group date " style="margin-bottom: 8px" >
+                        <input type="text" th:field="*{newsDate}"
+                               th:placeholder="#{label.news.date}"
+                               onkeydown="return false"
+                               class="form-control datepicker1"/>
+                        <div class="input-group-addon " >
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </td>
+                    <td th:if="${#fields.hasErrors('newsDate')}" th:errors="*{newsDate}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.news.expiration.date}"/>
+                    </td>
+                    <td class="input-group date " style="margin-bottom: 8px" >
+                        <input type="text" th:field="*{expirationDate}"
+                               th:placeholder="#{label.news.expiration.date}"
+                               onkeydown="return false"
+                               class="form-control datepicker2 "/>
+                        <div class="input-group-addon " >
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </td>
+                    <td th:if="${#fields.hasErrors('expirationDate')}" th:errors="*{expirationDate}" class="field-error"></td>
+                </tr>
+                <tr th:if="*{newsFilename != null}">
+                    <td>
+                        <label th:utext="#{label.news.file}"/>
+                    </td>
+                    <td>
+                        <a id="newsFilename" ng-show="!newsRemoved"
+                           th:href="@{/coating/newsFile/{id}(id=*{id})}"
+                           th:text="*{newsFilename}"></a>
+                        <label ng-show="newsRemoved" th:text="*{newsFilename}"></label>
+                        <input type="hidden" id="newsFilename"
+                               th:attr="name='newsFilename'" th:value="*{newsFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.news.file}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('newsFilename')}" th:errors="*{newsFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.news.removeFile}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="newsRemoved" ng-model="newsRemoved" ng-click="newsRemovedChanged()"/>
+                    </td>
+                </tr>
+                <tr th:if="*{newsLinkFilename != null}">
+                    <td>
+                        <label th:utext="#{label.news.file}"/>
+                    </td>
+                    <td>
+                        <a id="newsFilename" ng-show="!newsLinkRemoved"
+                           th:href="@{/coating/newsLink/{id}(id=*{id})}"
+                           th:text="*{newsLinkFilename}"></a>
+                        <label ng-show="newsLinkRemoved" th:text="*{newsLinkFilename}"></label>
+                        <input type="hidden" id="newsLinkFilename"
+                               th:attr="name='newsLinkFilename'" th:value="*{newsLinkFilename}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.news.link}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="link" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('newsLinkFilename')}" th:errors="*{newsLinkFilename}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.news.removeLink}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="newsLinkRemoved" ng-model="newsLinkRemoved" ng-click="newsLinkRemovedChanged()"/>
+                    </td>
+                </tr>
+
+                <tr th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+                    <td style="vertical-align: top;">
+                        <label th:utext="#{label.news.text}">Text</label>
+                    </td>
+                    <td style="padding-bottom: 20px;">
+                        <table th:with="info=${news.getInfo(lang)}">
+                            <tr>
+                                <td th:if="${info == null}">
+                                    <img th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class="name-flag"/>
+                                    <input type="text" th:field="*{infoList[__${status.index}__].title}"
+                                           th:placeholder="title" class="form-control" style="padding-left: 40px; width: 610px;"/>
+                                    <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${lang}"/>
+                                </td>
+                                <td th:if="${info != null}">
+                                    <img th:src="@{'/image/flag/' + ${info.language.language} + '.png'}" class="name-flag"/>
+                                    <input type="text" th:attr="name='infoList[' + ${status.index} + '].title'" th:value="${info.title}"
+                                           th:placeholder="name" class="form-control" style="padding-left: 40px; width: 610px;"/>
+                                    <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                                    <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${info.language}"/>
+                                </td>
+                                <td th:if="${#fields.hasErrors('infoList[' + status.index + '].title')}"
+                                    th:errors="*{infoList[__${status.index}__].title}" class="field-error">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div th:replace="widget/richeditor :: richeditor(id='infoList[' + ${status.index} + '].text')"></div>
+                                </td>
+                                <td th:if="${#fields.hasErrors('infoList[' + status.index + '].text')}"
+                                    th:errors="*{infoList[__${status.index}__].text}" class="field-error">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

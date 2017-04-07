@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+<div class="navbar navbar-default navbar-inverse navbar-fixed-top layout-header" th:fragment="header">
+	<div class="container">
+		<div class="navbar-collapse collapse">
+			<a th:href="@{/}">
+				<div class="logo"></div>
+			</a>
+			<nav class="navbar " role="navigation">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#lang">
+							<div>
+								<span>
+									<img th:width="30px" th:src="@{'/image/flag/' + ${#locale} + '.png'}" class=" "/>
+								</span>
+								<span style="font-size:16px;padding-left: 16px" >
+									<th:block th:utext="#{label.lang.__${#locale}__}" />
+								</span>
+							</div>
+						</a>
+						<ul class="dropdown-menu forAnimate"
+							th:attr="data-current-locale=__${#locale}__" role="menu" id="lang" >
+							<li th:attr="data-locale=${lang.language}" th:each="lang : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+								<a th:href="@{/locale(lang=${lang.language})}" href="/locale?lang=${lang.language}">
+									<div>
+										<span>
+											<img th:width="30px" th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class=" "/>
+										</span>
+										<span style="font-size:16px;padding-left: 16px" >
+											<th:block th:utext="#{__${lang.labelKey}__}" />
+										</span>
+									</div>
+								</a>
+							</li>
+						</ul>
+						<!--<ul class="dropdown-menu forAnimate" role="menu" id="lang"
+							th:with="currentUrl=(${#httpServletRequest.requestURI})">
+							<li th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+								<a  th:href="@{${currentUrl}(lang=${lang.language})}">
+									<div>
+										<span>
+											<img th:width="30px" th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class=" "/>
+										</span>
+										<span style="font-size:16px;padding-left: 16px" >
+											<th:block th:utext="#{__${lang.labelKey}__}" />
+										</span>
+									</div>
+								</a>
+							</li>
+						</ul>-->
+					</li>
+					<th:block sec:authorize="isAuthenticated()">
+						<li>
+							<a th:href="@{/logout}">Sign out</a>
+						</li>
+					</th:block>
+					<th:block sec:authorize="isAnonymous()">
+						<li>
+							<th:block th:switch="${currentPage == 'login'}">
+								<span th:case="true" class="active"><label th:utext="#{label.signIn}"/></span>
+								<a th:case="false" th:href="@{/login}"><label th:utext="#{label.signIn}"/></a>
+							</th:block>
+						</li>
+					</th:block>
+				</ul>
+			</nav>
+
+		</div>
+        <input type="hidden" id="csrfToken" th:name="${_csrf.headerName}" th:value="${_csrf.token}"/>
+	</div>
+</div>
+</body>
+</html>

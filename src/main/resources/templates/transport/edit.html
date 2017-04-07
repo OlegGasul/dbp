@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='transport'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms">
+        <form action="#" th:action="@{/transport/edit}" th:object="${transport}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.transport.form.edit}"></caption>
+
+                <!--properties start-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.verpGrp}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{verpGrp}" th:placeholder="#{label.transport.form.verpGrp}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('verpGrp')}" th:errors="*{verpGrp}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.clazz}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{clazz}" th:placeholder="#{label.transport.form.clazz}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('clazz')}" th:errors="*{clazz}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.verpVorschr}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{verpVorschr}" th:placeholder="#{label.transport.form.verpVorschr}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('verpVorschr')}" th:errors="*{verpVorschr}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.verpSoSuggest}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{verpSoSuggest}" th:placeholder="#{label.transport.form.verpSoSuggest}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('verpSoSuggest')}" th:errors="*{verpSoSuggest}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IBCVorschr}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IBCVorschr}" th:placeholder="#{label.transport.form.IBCVorschr}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IBCVorschr')}" th:errors="*{IBCVorschr}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.LTDQtyVorschr}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{LTDQtyVorschr}" th:placeholder="#{label.transport.form.LTDQtyVorschr}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('LTDQtyVorschr')}" th:errors="*{LTDQtyVorschr}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.taVoSW}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{taVoSW}" th:placeholder="#{label.transport.form.taVoSW}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('taVoSW')}" th:errors="*{taVoSW}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_LQ_V}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_LQ_V}" th:placeholder="#{label.transport.form.IATA_LQ_V}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_LQ_V')}" th:errors="*{IATA_LQ_V}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_LQ_M}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_LQ_M}" th:placeholder="#{label.transport.form.IATA_LQ_M}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_LQ_M')}" th:errors="*{IATA_LQ_M}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_LQ_BME}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_LQ_BME}" th:placeholder="#{label.transport.form.IATA_LQ_BME}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_LQ_BME')}" th:errors="*{IATA_LQ_BME}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_PASSENGER_V}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_PASSENGER_V}" th:placeholder="#{label.transport.form.IATA_PASSENGER_V}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_PASSENGER_V')}" th:errors="*{IATA_PASSENGER_V}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_PASSENGER_M}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_PASSENGER_M}" th:placeholder="#{label.transport.form.IATA_PASSENGER_M}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_PASSENGER_M')}" th:errors="*{IATA_PASSENGER_M}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_PASSENGER_BME}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_PASSENGER_BME}" th:placeholder="#{label.transport.form.IATA_PASSENGER_BME}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_PASSENGER_BME')}" th:errors="*{IATA_PASSENGER_BME}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_CARGO_V}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_CARGO_V}" th:placeholder="#{label.transport.form.IATA_CARGO_V}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_CARGO_V')}" th:errors="*{IATA_CARGO_V}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_CARGO_M}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_CARGO_M}" th:placeholder="#{label.transport.form.IATA_CARGO_M}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_CARGO_M')}" th:errors="*{IATA_CARGO_M}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.IATA_CARGO_BME}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{IATA_CARGO_BME}" th:placeholder="#{label.transport.form.IATA_CARGO_BME}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('IATA_CARGO_BME')}" th:errors="*{IATA_CARGO_BME}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.Assim}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{Assim}" th:placeholder="#{label.transport.form.Assim}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('Assim')}" th:errors="*{Assim}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.permeate}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{permeate}" th:placeholder="#{label.transport.form.permeate}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('permeate')}" th:errors="*{permeate}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.explosionGroup}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{explosionGroup}" th:placeholder="#{label.transport.form.explosionGroup}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('explosionGroup')}" th:errors="*{explosionGroup}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.transport.form.dataSource}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{dataSource}" th:placeholder="#{label.transport.form.dataSource}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('dataSource')}" th:errors="*{dataSource}" class="field-error"></td>
+                </tr>
+                <!--properties end-->
+
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

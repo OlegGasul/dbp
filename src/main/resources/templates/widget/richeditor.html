@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <div th:fragment="richeditor" th:with="curInfo=${news.getInfo(lang)}">
+        <textarea th:id="${id}" th:name="${id}" required="required" th:text="${curInfo != null ? curInfo.text : ''}">
+                    &lt;p&gt;
+                        Example template layout.
+                    &lt;/p&gt;
+        </textarea>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var idparam = [[${id}]];
+            CKEDITOR.replace(idparam, {
+                allowedContent : true,
+                        height: '400px'
+            });
+            /*]]>*/
+    </script>
+</div>
+</body>
+</html>

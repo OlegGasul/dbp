@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='assimilationlist'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms">
+        <form enctype="multipart/form-data"  action="#" th:action="@{/assimilationlist/add}" th:object="${assimilationList}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.assimilationList.form}"></caption>
+                <!--properties start-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.designation}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{designation}" th:placeholder="#{label.assimilationList.form.designation}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.clazz}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{clazz}" th:placeholder="#{label.assimilationList.form.clazz}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('clazz')}" th:errors="*{clazz}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.classificationCode}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{classificationCode}" th:placeholder="#{label.assimilationList.form.classificationCode}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('classificationCode')}" th:errors="*{classificationCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.classificationGroup}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{classificationGroup}" th:placeholder="#{label.assimilationList.form.classificationGroup}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('classificationGroup')}" th:errors="*{classificationGroup}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.packagingGroup}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{packagingGroup}" th:placeholder="#{label.assimilationList.form.packagingGroup}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('packagingGroup')}" th:errors="*{packagingGroup}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.assimilationCode}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{assimilationCode}" th:placeholder="#{label.assimilationList.form.assimilationCode}" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('assimilationCode')}" th:errors="*{assimilationCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.assimilationList.form.dataSource}"/>
+                    </td>
+                    <td>
+                        <input type="file" name="file" class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('dataSourceFilename')}" th:errors="*{dataSourceFilename}" class="field-error"></td>
+                </tr>
+                <!--properties end-->
+                <tr>
+                    <td colspan="2" style="text-align: right;">
+                        <button type="reset" th:utext="#{btn.reset}" class="btn btn-sm btn-default">reset</button>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-sm btn-default">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

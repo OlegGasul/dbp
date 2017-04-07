@@ -1,0 +1,11 @@
+Add the code bellow into server.xml configuration
+
+ <Connector port="8443"
+         protocol="org.apache.coyote.http11.Http11Protocol"
+         SSLEnabled="true"
+         maxThreads="150"
+         scheme="https"
+         secure="true"
+         keystoreFile="C:\\Tomcat-7.0.54\\certs\\server.jks"
+         keystorePass="123456"
+         sslProtocol="TLS" />

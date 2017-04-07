@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='conicalcanister'">
+<head></head>
+<body>
+<div th:fragment="content" class="content">
+
+    <link th:href="@{/css/objects.css}" href="../static/css/objects.css" rel="stylesheet" media="screen"/>
+    <script src="../static/js/container.js" th:src="@{/js/container.js}"></script>
+
+    <div th:if="${message != null}" class="alert alert-success">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="forms" ng-controller="containerController" id="conicalcanisterForm">
+        <form enctype="multipart/form-data" action="#" th:action="@{/conicalcanister/edit}" th:object="${conicalcanister}" method="post">
+            <table style="margin: 0 auto">
+                <caption th:utext="#{title.conical.canister.form}"></caption>
+                <!--Common Container Fields-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.sap.code}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{sapCode}" th:placeholder="#{label.container.sap.code}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('sapCode')}" th:errors="*{sapCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.local.code}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{localCode}" th:placeholder="#{label.container.local.code}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('localCode')}" th:errors="*{localCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.global.code}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{globalCode}" th:placeholder="#{label.container.global.code}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('globalCode')}" th:errors="*{globalCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.status}"></label>
+                    </td>
+                    <td>
+                        <select th:field="*{status}" class="form-control">
+                            <option th:each="status :${T(de.mexchange.packagingdb.domain.lcp.ContainerStatus).values()}"
+                                    th:value="${status.name()}"
+                                    th:utext="#{${status.labelKey}}"></option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.location}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{location.id}" >
+                            <option value="" th:utext="#{form.location.choose}">-- Choose --</option>
+                            <option th:each="location : ${locations}"
+                                    th:value="${location.id}"
+                                    th:text="${location.name}">
+                                <span th:utext="#{label.container.location}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.business.unit}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{businessUnit.id}" >
+                            <option value="" th:utext="#{form.bu.choose}">-- Choose --</option>
+                            <option th:each="businessunit : ${businessunits}"
+                                    th:value="${businessunit.id}"
+                                    th:text="${businessunit.name}">
+                                <span th:utext="#{label.container.business.unit}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('businessUnit')}" th:errors="*{businessUnit}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td >
+                        <label th:utext="#{label.container.company}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{company.id}" >
+                            <option value="" th:utext="#{form.company.choose}">-- Choose --</option>
+                            <option th:each="company : ${companies}"
+                                    th:value="${company.id}"
+                                    th:text="${company.name}">
+                                <span th:utext="#{label.container.company}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('company')}" th:errors="*{company}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.nominal.volume}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{nominalVolume}" th:placeholder="#{label.container.nominal.volume}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('nominalVolume')}" th:errors="*{nominalVolume}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.designation}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{designation}" th:placeholder="#{label.container.designation}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.overflow.volume}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{overflowVolume}" th:placeholder="#{label.container.overflow.volume}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('overflowVolume')}" th:errors="*{overflowVolume}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.un.code}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{unCode}" th:placeholder="#{label.container.un.code}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('unCode')}" th:errors="*{unCode}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.exzone}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{exZone.id}" >
+                            <option value="" th:utext="#{form.exzone.choose}">-- Choose --</option>
+                            <option th:each="exzone : ${exzones}"
+                                    th:value="${exzone.id}"
+                                    th:text="${exzone.name}">
+                                <span th:utext="#{label.container.exzone}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('exZone')}" th:errors="*{exZone}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.perm.lock}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{permLock}" th:placeholder="#{label.container.perm.lock}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('permLock')}" th:errors="*{permLock}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.embossing}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{embossing}" th:placeholder="#{label.container.embossing}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('embossing')}" th:errors="*{embossing}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.embossing.position}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{embossingPosition}" th:placeholder="#{label.container.embossing.position}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('embossingPosition')}" th:errors="*{embossingPosition}" class="field-error"></td>
+                </tr>
+                <!--Coating InSide-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.coating.inside}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{coatingInside.id}" >
+                            <option value="" th:utext="#{form.coating.inside.choose}">-- Choose --</option>
+                            <option th:each="coating : ${coatings}"
+                                    th:value="${coating.id}"
+                                    th:text="${coating.name}">
+                                <span th:utext="#{label.container.coating.inside}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('coatingInside')}" th:errors="*{coatingInside}" class="field-error"></td>
+                </tr>
+                <!--Coating OutSide-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.coating.outside}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{coatingOutside.id}" >
+                            <option value="" th:utext="#{form.coating.outside.choose}">-- Choose --</option>
+                            <option th:each="coating : ${coatings}"
+                                    th:value="${coating.id}"
+                                    th:text="${coating.name}">
+                                <span th:utext="#{label.container.coating.outside}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('coatingOutside')}" th:errors="*{coatingOutside}" class="field-error"></td>
+                </tr>
+                <!--Manufacture Specifications-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.manufacturer.specifications}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                               th:attr="name='specificationsRemoved'"
+                               ng-model="specificationsRemoved"
+                               ng-click="specificationsRemovedChanged()"/>
+                        <label ng-show="specificationsRemoved"
+                               th:text="*{manufacturerSpecificationsFilename}"></label>
+                        <input type="hidden"
+                               id="specificationsFilename"
+                               th:attr="name='manufacturerSpecificationsFilename'"
+                               th:value="*{manufacturerSpecificationsFilename}"/>
+                        <a ng-show="!specificationsRemoved"
+                           th:href="@{/bigbags/specifications/{id}(id=${id})}"
+                           th:text="*{manufacturerSpecificationsFilename}"></a>
+                        <input type="file" name="fileSpecifications" id="specifications" class="form-control"
+                               ng-init="specificationsRemoved=false"
+                               onchange="angular.element(this).scope().fileNameChanged(this,'specifications_error')"/>
+                    </td>
+                    <td id="specifications_error" style="display: none" class="field-error">
+                        <label th:utext="#{err.msg.file.upload.failed}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('manufacturerSpecificationsFilename')}"
+                        th:errors="*{manufacturerSpecificationsFilename}" class="field-error">
+                    </td>
+                </tr>
+                <!--Drawing-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.drawing.number}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{drawingNumber}" th:placeholder="#{label.container.drawing.number}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('drawingNumber')}" th:errors="*{drawingNumber}" class="field-error"></td>
+                </tr>
+                <!--drawing-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.drawing}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                               th:attr="name='drawingRemoved'"
+                               ng-model="drawingRemoved"
+                               ng-click="drawingRemovedChanged()"/>
+                        <label ng-show="drawingRemoved" th:text="*{drawingFilename}"></label>
+                        <input type="hidden" id="drawingFilename"
+                               th:attr="name='drawingFilename'"
+                               th:value="*{drawingFilename}"/>
+                        <a ng-show="!drawingRemoved"
+                           th:href="@{/bigbags/drawing/{id}(id=${id})}"
+                           th:text="*{drawingFilename}"></a>
+                        <input type="file" name="fileDrawing" id="drawing" class="form-control"
+                               ng-init="drawingRemoved=false"
+                               onchange="angular.element(this).scope().fileNameChanged(this,'drawing_error')"/>
+                    </td>
+                    <td id="drawing_error" style="display: none" class="field-error">
+                        <label th:utext="#{err.msg.file.upload.failed}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('drawingFilename')}" th:errors="*{drawingFilename}" class="field-error"></td>
+                </tr>
+                <!--drawingCad-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.drawing.cad}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                               th:attr="name='drawingCADRemoved'"
+                               ng-model="drawingCADRemoved"
+                               ng-click="drawingCADRemovedChanged()"/>
+                        <label ng-show="drawingCADRemoved" th:text="*{drawingCADFilename}"></label>
+                        <input type="hidden" id="drawingCADFilename"
+                               th:attr="name='drawingCADFilename'"
+                               th:value="*{drawingCADFilename}"/>
+                        <a ng-show="!drawingCADRemoved"
+                           th:href="@{/bigbags/drawingcad/{id}(id=${id})}"
+                           th:text="*{drawingCADFilename}"></a>
+                        <input type="file" name="fileDrawingCAD" id="drawingCAD" class="form-control"
+                               ng-init="drawingCADRemoved=false"
+                               onchange="angular.element(this).scope().fileNameChanged(this,'drawingCAD_error')"/>
+                    </td>
+                    <td id="drawingCAD_error" style="display: none" class="field-error">
+                        <label th:utext="#{err.msg.file.upload.failed}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('drawingCADFilename')}" th:errors="*{drawingCADFilename}" class="field-error"></td>
+                </tr>
+                <!--Frame Width-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.width}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{width}" th:placeholder="#{label.container.width}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('width')}" th:errors="*{width}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.width.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{widthMax}" th:placeholder="#{label.container.width.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('widthMax')}" th:errors="*{widthMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.width.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{widthMin}" th:placeholder="#{label.container.width.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('widthMin')}" th:errors="*{widthMin}" class="field-error"></td>
+                </tr>
+                <!--Depth-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.depth}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{depth}" th:placeholder="#{label.container.depth}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('depth')}" th:errors="*{depth}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.depth.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{depthMax}" th:placeholder="#{label.container.depth.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('depthMax')}" th:errors="*{depthMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.depth.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{depthMin}" th:placeholder="#{label.container.depth.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('depthMin')}" th:errors="*{depthMin}" class="field-error"></td>
+                </tr>
+                <!--Total Weight-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.total.weight}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{totalWeight}" th:placeholder="#{label.container.total.weight}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('totalWeight')}" th:errors="*{totalWeight}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.total.weight.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{totalWeightMax}" th:placeholder="#{label.container.total.weight.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('totalWeightMax')}" th:errors="*{totalWeightMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.total.weight.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{totalWeightMin}" th:placeholder="#{label.container.total.weight.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('totalWeightMin')}" th:errors="*{totalWeightMin}" class="field-error"></td>
+                </tr>
+                <!--Ground Wall Thickness-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.ground.wall.thickness}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{groundWallThickness}" th:placeholder="#{label.container.ground.wall.thickness}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('groundWallThickness')}" th:errors="*{groundWallThickness}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.ground.wall.thickness.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{groundWallThicknessMax}" th:placeholder="#{label.container.ground.wall.thickness.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('groundWallThicknessMax')}" th:errors="*{groundWallThicknessMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.ground.wall.thickness.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{groundWallThicknessMin}" th:placeholder="#{label.container.ground.wall.thickness.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('groundWallThicknessMin')}" th:errors="*{groundWallThicknessMin}" class="field-error"></td>
+                </tr>
+                <!--Wall Thickness Container-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.wall.thickness.container}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{wallThicknessContainer}" th:placeholder="#{label.container.wall.thickness.container}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('wallThicknessContainer')}" th:errors="*{wallThicknessContainer}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.wall.thickness.container.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{wallThicknessContainerMax}" th:placeholder="#{label.container.wall.thickness.container.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('wallThicknessContainerMax')}" th:errors="*{wallThicknessContainerMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.wall.thickness.container.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{wallThicknessContainerMin}" th:placeholder="#{label.container.wall.thickness.container.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('wallThicknessContainerMin')}" th:errors="*{wallThicknessContainerMin}" class="field-error"></td>
+                </tr>
+                <!--Lid Wall Thickness-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.lid.wall.thickness}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{lidWallThickness}" th:placeholder="#{label.container.lid.wall.thickness}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('lidWallThickness')}" th:errors="*{lidWallThickness}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.lid.wall.thickness.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{lidWallThicknessMax}" th:placeholder="#{label.container.lid.wall.thickness.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('lidWallThicknessMax')}" th:errors="*{lidWallThicknessMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.lid.wall.thickness.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{lidWallThicknessMin}" th:placeholder="#{label.container.lid.wall.thickness.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('lidWallThicknessMin')}" th:errors="*{lidWallThicknessMin}" class="field-error"></td>
+                </tr>
+                <!--Overall Height-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.overall.height}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{overallHeight}" th:placeholder="#{label.container.overall.height}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('overallHeight')}" th:errors="*{overallHeight}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.overall.height.max}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{overallHeightMax}" th:placeholder="#{label.container.overall.height.max}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('overallHeightMax')}" th:errors="*{overallHeightMax}" class="field-error"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.overall.height.min}"/>
+                    </td>
+                    <td>
+                        <input type="text" pattern="[0-9]+([./][0-9]{1,2}){0,1}"
+                               th:field="*{overallHeightMin}" th:placeholder="#{label.container.overall.height.min}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('overallHeightMin')}" th:errors="*{overallHeightMin}" class="field-error"></td>
+                </tr>
+                <!--Container Material-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.container.material}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{containerMaterial.id}" >
+                            <option value="" th:utext="#{form.container.material.choose}">-- Choose --</option>
+                            <option th:each="material : ${materials}"
+                                    th:value="${material.id}"
+                                    th:text="${material.name}">
+                                <span th:utext="#{label.container.container.material}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('containerMaterial')}" th:errors="*{containerMaterial}" class="field-error"></td>
+                </tr>
+                <!--Hole-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.hole}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{hole.id}" >
+                            <option value="" th:utext="#{form.hole.choose}">-- Choose --</option>
+                            <option th:each="closure : ${closures}"
+                                    th:value="${closure.id}"
+                                    th:text="${closure.name}">
+                                <span th:utext="#{label.container.hole}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('hole')}" th:errors="*{hole}" class="field-error"></td>
+                </tr>
+                <!--Handle-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.handle}"></label>
+                    </td>
+                    <td>
+                        <select class="form-control" th:field="*{handle.id}" >
+                            <option value="" th:utext="#{form.handle.choose}">-- Choose --</option>
+                            <option th:each="handle : ${handles}"
+                                    th:value="${handle.id}"
+                                    th:text="${handle.name}">
+                                <span th:utext="#{label.container.handle}" th:remove="tag"></span>
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('handle')}" th:errors="*{handle}" class="field-error"></td>
+                </tr>
+                <!--Other-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.other}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{other}" th:placeholder="#{label.container.other}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('other')}" th:errors="*{other}" class="field-error"></td>
+                </tr>
+                <!--Sicken-->
+                <tr>
+                    <td>
+                        <label th:utext="#{label.container.sicken}"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{sicken}" th:placeholder="#{label.container.sicken}"  class="form-control"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('sicken')}" th:errors="*{sicken}" class="field-error"></td>
+                </tr>
+
+                <!-- Multi Lang Fields-->
+                <tr th:each="lang, status : ${T(de.mexchange.packagingdb.domain.lcp.Language).activeLanguages()}">
+                    <td>
+                        <label th:if="${status.index == 0}" th:utext="#{label.container.comments}"></label>
+                    </td>
+                    <td th:with="info=${conicalcanister.getInfo(lang)}">
+                        <img th:src="@{'/image/flag/' + ${lang.language} + '.png'}" class="name-flag"/>
+                        <input type="hidden" th:if="${info != null}" th:attr="name='infoList[' + ${status.index} + '].id'" th:value="${info.id}"/>
+                        <input type="hidden" th:attr="name='infoList[' + ${status.index} + '].language'" th:value="${lang}"/>
+                        <input type="text" th:field="*{infoList[__${status.index}__].comments}"
+                               th:placeholder="#{label.container.comments}"  class="form-control" style="padding-left: 40px;" th:value="${info != null ? info.comments : ''}"/>
+                    </td>
+                    <td th:if="${#fields.hasErrors('infoList[' + status.index + '].comments')}"
+                        th:errors="*{infoList[__${status.index}__].comments}" class="field-error"></td>
+                </tr>
+                <!--Action Buttons-->
+                <tr>
+                    <td colspan="2" style="text-align: right;padding-top: 20px;">
+                        <input type="hidden" th:attr="name='id'" th:value="*{id}"/>
+                        <button type="submit" th:utext="#{btn.save}" class="btn btn-default btn-sm">save</button>
+                    </td>
+                    <td th:if="${#fields.hasErrors('*')}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>
